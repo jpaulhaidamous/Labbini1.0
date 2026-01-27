@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== LABBINI BRAND VARIABLES ===== */
+:root {
+  --brand-cedar: #1B5E4A;
+  --brand-gold: #E8A945;
+  --brand-cream: #FDF8F3;
+  --brand-sand: #F5EDE3;
+  --brand-charcoal: #2C2C2C;
+  --brand-slate: #5A5A5A;
+}
+
+/* ===== BASE STYLES ===== */
+body {
+  background-color: var(--brand-cream);
+  color: var(--brand-charcoal);
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Arabic / Headings */
+.font-cairo,
+h1,
+h2,
+h3 {
+  font-family: 'Cairo', sans-serif;
+}

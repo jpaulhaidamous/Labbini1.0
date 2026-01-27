@@ -1,0 +1,1255 @@
+# Labbini (لبّيني) - Technical Requirements Document
+## Lebanon's Freelance & Services Marketplace
+
+**Version:** 1.0  
+**Date:** January 2026  
+**Status:** Production Build
+
+---
+
+## 1. Executive Summary
+
+### 1.1 Vision
+Labbini is a full-featured freelance and services marketplace tailored for the Lebanese market. The platform connects clients with service providers across all industries—from digital services (development, design, writing) to manual trades (plumbing, carpentry, electrical work). The name "Labbini" (لبّيني) means "answer my call / be there for me" in Lebanese Arabic.
+
+### 1.2 Core Differentiators
+- **Lebanon-First:** Arabic + English bilingual, RTL support, local payment methods (OMT, Whish, bank transfers)
+- **All Skills Welcome:** Unlike competitors, includes manual labor and trades alongside digital work
+- **Trust-Centric:** Phone verification + ID upload with manual review for all users
+- **Crisis-Resilient:** Designed for Lebanon's infrastructure challenges (offline-capable features, low-bandwidth optimization)
+
+---
+
+## 2. User Roles & Personas
+
+### 2.1 Client (Buyer)
+- Posts jobs/projects
+- Browses and hires freelancers
+- Manages contracts and payments
+- Leaves reviews
+
+### 2.2 Freelancer (Seller)
+- Creates profile and portfolio
+- Submits proposals
+- Completes work and gets paid
+- Builds reputation
+
+### 2.3 Admin
+- Reviews ID verifications
+- Handles disputes
+- Manages platform content
+- Monitors transactions
+
+---
+
+## 3. Core Features
+
+### 3.1 User Management
+
+#### 3.1.1 Registration & Authentication
+```
+- Email/password registration
+- Phone number verification (mandatory, Lebanese numbers +961)
+- Social login (Google, Facebook)
+- Two-factor authentication (SMS)
+- Password recovery via email/SMS
+```
+
+#### 3.1.2 Identity Verification (KYC)
+```
+Verification Levels:
+├── Level 0: Email verified only (can browse, cannot transact)
+├── Level 1: Phone verified (can submit proposals, limited features)
+├── Level 2: ID uploaded & approved (full platform access)
+└── Level 3: Premium verified (video call verification, badge)
+
+ID Documents Accepted:
+- Lebanese National ID (هوية)
+- Lebanese Passport
+- Residency Permit (إقامة) for non-Lebanese
+- Professional License (for trades)
+
+Manual Review Process:
+1. User uploads front/back of ID + selfie holding ID
+2. Admin reviews within 24-48 hours
+3. AI-assisted fraud detection (face match, document authenticity)
+4. Approval/rejection with reason
+```
+
+#### 3.1.3 User Profiles
+
+**Freelancer Profile:**
+```
+- Display name (Arabic + English)
+- Profile photo (verified against ID)
+- Location (Governorate, City)
+- Bio (bilingual)
+- Skills & categories (multi-select)
+- Hourly rate / fixed rate preference
+- Portfolio (images, links, documents)
+- Work history on platform
+- Reviews & ratings
+- Verification badges
+- Response time
+- Languages spoken
+- Availability status
+- Contact preferences
+```
+
+**Client Profile:**
+```
+- Company/individual toggle
+- Display name
+- Location
+- Payment verification status
+- Jobs posted history
+- Reviews given/received
+- Total spent on platform
+```
+
+### 3.2 Categories & Skills
+
+#### 3.2.1 Main Categories
+```
+Digital & Creative:
+├── Web Development
+├── Mobile Development
+├── Graphic Design
+├── UI/UX Design
+├── Video & Animation
+├── Writing & Translation
+├── Digital Marketing
+├── Data Entry
+└── Virtual Assistance
+
+Professional Services:
+├── Accounting & Finance
+├── Legal Services
+├── Business Consulting
+├── HR & Recruiting
+├── Teaching & Tutoring
+└── Photography
+
+Manual Trades:
+├── Plumbing (سباكة)
+├── Electrical (كهرباء)
+├── Carpentry (نجارة)
+├── Painting (دهان)
+├── HVAC / AC Repair (تكييف)
+├── Masonry (بناء)
+├── Welding (لحام)
+├── Auto Repair (ميكانيك)
+├── Landscaping (تنسيق حدائق)
+└── Cleaning Services (تنظيف)
+
+Events & Personal:
+├── Catering
+├── Event Planning
+├── Beauty & Makeup
+├── Personal Training
+├── Moving Services
+└── Delivery
+```
+
+### 3.3 Job/Project System
+
+#### 3.3.1 Job Types
+```
+1. Fixed-Price Projects
+   - Defined scope and deliverables
+   - Milestone-based payments
+   - Escrow protection
+
+2. Hourly Contracts
+   - Time tracking required
+   - Weekly billing cycles
+   - Activity monitoring (for digital work)
+
+3. Quick Tasks (New for Lebanon)
+   - Same-day/urgent jobs
+   - Flat fee
+   - Ideal for trades & errands
+   - Location-based matching
+```
+
+#### 3.3.2 Job Posting Flow
+```
+Step 1: Select Category
+Step 2: Choose Job Type (fixed/hourly/quick)
+Step 3: Title & Description (bilingual encouraged)
+Step 4: Skills Required
+Step 5: Budget Range or Hourly Rate
+Step 6: Timeline/Deadline
+Step 7: Location (if on-site work)
+Step 8: Attachments (files, images)
+Step 9: Visibility (public/invite-only)
+Step 10: Review & Post
+```
+
+#### 3.3.3 Job Data Model
+```
+Job {
+  id: UUID
+  client_id: UUID
+  title: { en: string, ar: string }
+  description: { en: string, ar: string }
+  category_id: UUID
+  subcategory_id: UUID
+  skills: UUID[]
+  job_type: enum [fixed, hourly, quick]
+  budget: {
+    type: enum [fixed, range, hourly]
+    min: number (USD)
+    max: number (USD)
+    currency_display: enum [USD, LBP]
+  }
+  location: {
+    type: enum [remote, onsite, hybrid]
+    governorate: string
+    city: string
+    address: string (encrypted, revealed after hire)
+    coordinates: { lat, lng }
+  }
+  timeline: {
+    start_date: date
+    end_date: date
+    is_urgent: boolean
+  }
+  attachments: Attachment[]
+  visibility: enum [public, private, invite]
+  status: enum [draft, open, in_progress, completed, cancelled]
+  proposals_count: number
+  views_count: number
+  created_at: timestamp
+  updated_at: timestamp
+}
+```
+
+### 3.4 Proposal & Hiring System
+
+#### 3.4.1 Proposal Submission
+```
+Proposal {
+  id: UUID
+  job_id: UUID
+  freelancer_id: UUID
+  cover_letter: text
+  proposed_rate: number
+  proposed_timeline: {
+    duration: number
+    unit: enum [hours, days, weeks, months]
+  }
+  milestones: Milestone[] (for fixed-price)
+  attachments: Attachment[]
+  questions_answers: QA[]
+  status: enum [pending, shortlisted, accepted, rejected, withdrawn]
+  created_at: timestamp
+}
+```
+
+#### 3.4.2 Hiring Flow
+```
+1. Client reviews proposals
+2. Client can:
+   - Message freelancer (pre-hire chat)
+   - Request more info
+   - Shortlist
+   - Reject with optional feedback
+3. Client selects freelancer
+4. Contract terms finalized
+5. Client funds escrow
+6. Contract begins
+```
+
+### 3.5 Contract & Milestone Management
+
+#### 3.5.1 Contract Types
+```
+Fixed-Price Contract:
+├── Total amount agreed
+├── Milestones defined (name, amount, description, due date)
+├── Client funds milestone before work begins
+├── Freelancer submits work
+├── Client approves → funds released
+└── Dispute option if issues
+
+Hourly Contract:
+├── Hourly rate agreed
+├── Weekly billing period
+├── Time logged manually (with notes)
+├── Optional: screenshot monitoring (digital work only)
+├── Weekly review by client
+├── Auto-payment if not disputed within 5 days
+└── Maximum weekly hours can be set
+```
+
+#### 3.5.2 Contract Data Model
+```
+Contract {
+  id: UUID
+  job_id: UUID
+  client_id: UUID
+  freelancer_id: UUID
+  type: enum [fixed, hourly]
+  status: enum [pending, active, paused, completed, cancelled, disputed]
+  terms: {
+    total_amount: number (for fixed)
+    hourly_rate: number (for hourly)
+    weekly_limit: number (for hourly)
+    start_date: date
+    end_date: date
+  }
+  milestones: Milestone[]
+  time_logs: TimeLog[]
+  messages_thread_id: UUID
+  created_at: timestamp
+  completed_at: timestamp
+}
+
+Milestone {
+  id: UUID
+  contract_id: UUID
+  name: string
+  description: text
+  amount: number
+  due_date: date
+  status: enum [pending, funded, in_progress, submitted, approved, disputed]
+  escrow_transaction_id: UUID
+  submissions: Submission[]
+}
+```
+
+### 3.6 Messaging System
+
+#### 3.6.1 Features
+```
+- Real-time messaging (WebSocket)
+- Message threads per job/contract
+- File attachments (images, documents, up to 25MB)
+- Voice messages
+- Read receipts
+- Typing indicators
+- Message search
+- Archive/delete conversations
+- Report/block users
+- Auto-translation (Arabic ↔ English) optional
+```
+
+#### 3.6.2 Pre-hire vs Post-hire
+```
+Pre-hire (Inquiry):
+- Limited to 10 messages before contract
+- No sharing of contact info (phone/email filtered)
+- Watermarked file sharing
+
+Post-hire (Contract):
+- Unlimited messaging
+- Contact info can be shared
+- Video call integration (optional)
+- Shared workspace/files
+```
+
+### 3.7 Payment System
+
+#### 3.7.1 Payment Methods (Lebanon-Specific)
+
+**For Clients (Funding Escrow):**
+```
+1. OMT
+   - Generate payment code
+   - Client pays at OMT agent
+   - Webhook confirmation
+   - Processing time: instant to 1 hour
+
+2. Whish Money
+   - In-app payment via Whish
+   - API integration
+   - Processing time: instant
+
+3. Bank Transfer (Fresh USD)
+   - Supported banks: Byblos, BLOM, BLC, etc.
+   - Wire transfer to platform's account
+   - Manual verification (1-2 business days)
+
+4. Credit/Debit Card
+   - Via Areeba or equivalent
+   - USD transactions
+   - 3D Secure required
+
+5. Cash (for Quick Tasks only)
+   - Client pays freelancer directly
+   - Both confirm on platform
+   - Higher service fee applies
+```
+
+**For Freelancers (Withdrawals):**
+```
+1. OMT Pickup
+   - Min withdrawal: $20
+   - Fee: $2 flat
+   - Available within 24 hours
+
+2. Whish Wallet
+   - Min withdrawal: $10
+   - Fee: 1.5%
+   - Instant
+
+3. Bank Transfer (Fresh USD Account)
+   - Min withdrawal: $100
+   - Fee: $5
+   - 2-3 business days
+
+4. Mobile Wallet (future)
+   - Integration with local e-wallets
+```
+
+#### 3.7.2 Escrow System
+```
+Flow:
+1. Client funds escrow (amount held by platform)
+2. Funds visible to freelancer (not accessible)
+3. Work completed
+4. Client approves release
+5. Funds transferred to freelancer wallet
+6. Freelancer withdraws
+
+Escrow States:
+- pending_funding
+- funded
+- released
+- refunded
+- disputed
+- partially_released
+```
+
+#### 3.7.3 Platform Fees
+```
+Service Fee Structure (Upwork-style sliding scale):
+
+First $500 with client:     20%
+$500.01 - $5,000:          15%
+$5,000.01+:                10%
+
+Example:
+- Job total: $600
+- Fee on first $500: $100 (20%)
+- Fee on remaining $100: $15 (15%)
+- Total fee: $115
+- Freelancer receives: $485
+```
+
+### 3.8 Reviews & Ratings
+
+#### 3.8.1 Review System
+```
+After contract completion, both parties review:
+
+Client Reviews Freelancer:
+- Overall rating (1-5 stars)
+- Category ratings:
+  - Quality of work
+  - Communication
+  - Timeliness
+  - Professionalism
+  - Would hire again?
+- Written review (public)
+- Private feedback (to platform)
+
+Freelancer Reviews Client:
+- Overall rating (1-5 stars)
+- Category ratings:
+  - Clear requirements
+  - Communication
+  - Payment promptness
+  - Professionalism
+  - Would work again?
+- Written review
+```
+
+#### 3.8.2 Rating Algorithm
+```
+Job Success Score (JSS):
+- Calculated from last 24 months
+- Weighted by contract value
+- Factors:
+  - Completion rate
+  - Client satisfaction
+  - On-time delivery
+  - Long-term relationships
+  - Dispute history
+
+Display: "95% Job Success"
+```
+
+### 3.9 Search & Discovery
+
+#### 3.9.1 Search Features
+```
+Freelancer Search:
+- Keyword search (skills, bio, title)
+- Category filter
+- Location filter (governorate, city)
+- Rating filter (min stars)
+- Hourly rate range
+- Job success score
+- Availability status
+- Verification level
+- Language
+- Sort by: relevance, rating, hourly rate, recently active
+
+Job Search:
+- Keyword search
+- Category filter
+- Job type filter
+- Budget range
+- Location (remote/onsite)
+- Posted date
+- Client history (repeat clients, verified payment)
+- Sort by: newest, budget high-low, proposals count
+```
+
+#### 3.9.2 Recommendation Engine
+```
+For Clients:
+- Suggest freelancers based on:
+  - Job category
+  - Past hiring history
+  - Budget match
+  - Location proximity (for trades)
+  - Availability
+
+For Freelancers:
+- Job recommendations based on:
+  - Skills match
+  - Category preference
+  - Earning history
+  - Response rate
+  - Location (for onsite jobs)
+```
+
+### 3.10 Notifications
+
+#### 3.10.1 Notification Types
+```
+In-App + Push + Email:
+- New message
+- New proposal on your job
+- Proposal status change
+- Contract started
+- Milestone funded
+- Payment received
+- Review received
+- Verification status
+- Account security alerts
+
+Email Only:
+- Weekly summary
+- Recommended jobs
+- Platform news
+- Payment receipts
+```
+
+### 3.11 Dispute Resolution
+
+#### 3.11.1 Dispute Process
+```
+1. Either party opens dispute
+2. 72-hour negotiation period (direct messaging)
+3. If unresolved, escalate to Labbini mediation
+4. Mediator reviews:
+   - Contract terms
+   - Message history
+   - Work submitted
+   - Time logs
+5. Mediator decision (binding)
+6. Funds distributed accordingly
+
+Dispute Outcomes:
+- Full refund to client
+- Full payment to freelancer
+- Partial split
+- Contract cancellation without penalty
+```
+
+---
+
+## 4. Technical Architecture
+
+### 4.1 System Overview
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                            │
+├─────────────────────────────────────────────────────────────────┤
+│  Web App (React/Next.js)  │  Mobile Web (PWA)  │  Admin Panel  │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         API GATEWAY                             │
+│                    (Kong / AWS API Gateway)                     │
+│         Rate Limiting │ Auth │ Routing │ Caching               │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      BACKEND SERVICES                           │
+├─────────────────────────────────────────────────────────────────┤
+│ Auth     │ Users    │ Jobs     │ Contracts │ Payments │ Messaging│
+│ Service  │ Service  │ Service  │ Service   │ Service  │ Service  │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       DATA LAYER                                │
+├─────────────────────────────────────────────────────────────────┤
+│ PostgreSQL │ Redis Cache │ Elasticsearch │ S3/Storage │ MongoDB │
+│ (Primary)  │ (Sessions)  │ (Search)      │ (Files)    │ (Logs)  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 4.2 Tech Stack
+
+#### 4.2.1 Frontend
+```
+Framework: Next.js 14+ (App Router)
+Language: TypeScript
+Styling: Tailwind CSS + Shadcn/ui
+State Management: Zustand + React Query
+Forms: React Hook Form + Zod
+i18n: next-intl (Arabic RTL support)
+Real-time: Socket.io client
+PWA: next-pwa
+```
+
+#### 4.2.2 Backend
+```
+Runtime: Node.js 20+
+Framework: NestJS or Express.js
+Language: TypeScript
+API: REST + WebSocket
+Auth: JWT + Refresh tokens
+Validation: Zod / class-validator
+ORM: Prisma
+```
+
+#### 4.2.3 Database
+```
+Primary: PostgreSQL 15+
+Cache: Redis 7+
+Search: Elasticsearch 8+ (or Meilisearch)
+File Storage: S3-compatible (AWS S3 / Cloudflare R2)
+```
+
+#### 4.2.4 Infrastructure
+```
+Hosting: AWS / DigitalOcean / Vercel + Railway
+CDN: Cloudflare
+CI/CD: GitHub Actions
+Monitoring: Sentry + Datadog
+Logging: ELK Stack or Logtail
+Email: SendGrid / Resend
+SMS: Twilio (Lebanon support)
+```
+
+### 4.3 Database Schema (Core Tables)
+
+```sql
+-- Users
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone VARCHAR(20) UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('client', 'freelancer', 'admin') DEFAULT 'freelancer',
+  verification_level INTEGER DEFAULT 0,
+  status ENUM('active', 'suspended', 'banned') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Profiles
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  display_name_en VARCHAR(100),
+  display_name_ar VARCHAR(100),
+  bio_en TEXT,
+  bio_ar TEXT,
+  avatar_url VARCHAR(500),
+  governorate VARCHAR(50),
+  city VARCHAR(100),
+  hourly_rate DECIMAL(10,2),
+  job_success_score INTEGER DEFAULT 0,
+  total_earned DECIMAL(15,2) DEFAULT 0,
+  total_jobs_completed INTEGER DEFAULT 0,
+  is_available BOOLEAN DEFAULT TRUE,
+  profile_visibility ENUM('public', 'private') DEFAULT 'public',
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Categories
+CREATE TABLE categories (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  parent_id UUID REFERENCES categories(id),
+  name_en VARCHAR(100) NOT NULL,
+  name_ar VARCHAR(100) NOT NULL,
+  slug VARCHAR(100) UNIQUE NOT NULL,
+  icon VARCHAR(50),
+  sort_order INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Skills
+CREATE TABLE skills (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  category_id UUID REFERENCES categories(id),
+  name_en VARCHAR(100) NOT NULL,
+  name_ar VARCHAR(100) NOT NULL,
+  slug VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- User Skills
+CREATE TABLE user_skills (
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  skill_id UUID REFERENCES skills(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, skill_id)
+);
+
+-- Jobs
+CREATE TABLE jobs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  client_id UUID REFERENCES users(id),
+  title_en VARCHAR(200) NOT NULL,
+  title_ar VARCHAR(200),
+  description_en TEXT NOT NULL,
+  description_ar TEXT,
+  category_id UUID REFERENCES categories(id),
+  job_type ENUM('fixed', 'hourly', 'quick') NOT NULL,
+  budget_type ENUM('fixed', 'range', 'hourly') NOT NULL,
+  budget_min DECIMAL(10,2),
+  budget_max DECIMAL(10,2),
+  location_type ENUM('remote', 'onsite', 'hybrid') DEFAULT 'remote',
+  governorate VARCHAR(50),
+  city VARCHAR(100),
+  address_encrypted TEXT,
+  latitude DECIMAL(10,8),
+  longitude DECIMAL(11,8),
+  start_date DATE,
+  end_date DATE,
+  is_urgent BOOLEAN DEFAULT FALSE,
+  visibility ENUM('public', 'private', 'invite') DEFAULT 'public',
+  status ENUM('draft', 'open', 'in_progress', 'completed', 'cancelled') DEFAULT 'draft',
+  proposals_count INTEGER DEFAULT 0,
+  views_count INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Proposals
+CREATE TABLE proposals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID REFERENCES jobs(id) ON DELETE CASCADE,
+  freelancer_id UUID REFERENCES users(id),
+  cover_letter TEXT NOT NULL,
+  proposed_rate DECIMAL(10,2) NOT NULL,
+  proposed_duration INTEGER,
+  duration_unit ENUM('hours', 'days', 'weeks', 'months'),
+  status ENUM('pending', 'shortlisted', 'accepted', 'rejected', 'withdrawn') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Contracts
+CREATE TABLE contracts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID REFERENCES jobs(id),
+  client_id UUID REFERENCES users(id),
+  freelancer_id UUID REFERENCES users(id),
+  contract_type ENUM('fixed', 'hourly') NOT NULL,
+  status ENUM('pending', 'active', 'paused', 'completed', 'cancelled', 'disputed') DEFAULT 'pending',
+  total_amount DECIMAL(10,2),
+  hourly_rate DECIMAL(10,2),
+  weekly_limit INTEGER,
+  start_date DATE,
+  end_date DATE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  completed_at TIMESTAMP
+);
+
+-- Milestones
+CREATE TABLE milestones (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  contract_id UUID REFERENCES contracts(id) ON DELETE CASCADE,
+  name VARCHAR(200) NOT NULL,
+  description TEXT,
+  amount DECIMAL(10,2) NOT NULL,
+  due_date DATE,
+  status ENUM('pending', 'funded', 'in_progress', 'submitted', 'approved', 'disputed') DEFAULT 'pending',
+  funded_at TIMESTAMP,
+  submitted_at TIMESTAMP,
+  approved_at TIMESTAMP
+);
+
+-- Transactions
+CREATE TABLE transactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id),
+  contract_id UUID REFERENCES contracts(id),
+  milestone_id UUID REFERENCES milestones(id),
+  type ENUM('deposit', 'escrow_fund', 'escrow_release', 'withdrawal', 'refund', 'fee') NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(3) DEFAULT 'USD',
+  payment_method ENUM('omt', 'whish', 'bank_transfer', 'card', 'cash', 'wallet') NOT NULL,
+  status ENUM('pending', 'processing', 'completed', 'failed', 'cancelled') DEFAULT 'pending',
+  external_reference VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW(),
+  completed_at TIMESTAMP
+);
+
+-- Wallet
+CREATE TABLE wallets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) UNIQUE,
+  available_balance DECIMAL(15,2) DEFAULT 0,
+  pending_balance DECIMAL(15,2) DEFAULT 0,
+  total_earned DECIMAL(15,2) DEFAULT 0,
+  total_withdrawn DECIMAL(15,2) DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Messages
+CREATE TABLE message_threads (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID REFERENCES jobs(id),
+  contract_id UUID REFERENCES contracts(id),
+  participant_ids UUID[] NOT NULL,
+  last_message_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  thread_id UUID REFERENCES message_threads(id) ON DELETE CASCADE,
+  sender_id UUID REFERENCES users(id),
+  content TEXT NOT NULL,
+  content_type ENUM('text', 'file', 'voice', 'system') DEFAULT 'text',
+  attachments JSONB,
+  is_read BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Reviews
+CREATE TABLE reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  contract_id UUID REFERENCES contracts(id),
+  reviewer_id UUID REFERENCES users(id),
+  reviewee_id UUID REFERENCES users(id),
+  overall_rating INTEGER CHECK (overall_rating >= 1 AND overall_rating <= 5),
+  quality_rating INTEGER,
+  communication_rating INTEGER,
+  timeliness_rating INTEGER,
+  professionalism_rating INTEGER,
+  would_recommend BOOLEAN,
+  public_review TEXT,
+  private_feedback TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Verification Documents
+CREATE TABLE verification_documents (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id),
+  document_type ENUM('national_id', 'passport', 'residency', 'license') NOT NULL,
+  front_image_url VARCHAR(500),
+  back_image_url VARCHAR(500),
+  selfie_image_url VARCHAR(500),
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  rejection_reason TEXT,
+  reviewed_by UUID REFERENCES users(id),
+  reviewed_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### 4.4 API Endpoints (Core)
+
+```
+Authentication:
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/logout
+POST   /api/auth/refresh
+POST   /api/auth/forgot-password
+POST   /api/auth/reset-password
+POST   /api/auth/verify-phone
+POST   /api/auth/verify-email
+
+Users:
+GET    /api/users/me
+PUT    /api/users/me
+GET    /api/users/:id
+GET    /api/users/:id/reviews
+POST   /api/users/verify-identity
+
+Profiles:
+GET    /api/profiles/:id
+PUT    /api/profiles/me
+GET    /api/profiles/me/portfolio
+POST   /api/profiles/me/portfolio
+DELETE /api/profiles/me/portfolio/:id
+
+Jobs:
+GET    /api/jobs
+GET    /api/jobs/:id
+POST   /api/jobs
+PUT    /api/jobs/:id
+DELETE /api/jobs/:id
+GET    /api/jobs/:id/proposals
+POST   /api/jobs/:id/invite
+
+Proposals:
+GET    /api/proposals
+GET    /api/proposals/:id
+POST   /api/proposals
+PUT    /api/proposals/:id
+DELETE /api/proposals/:id
+
+Contracts:
+GET    /api/contracts
+GET    /api/contracts/:id
+POST   /api/contracts
+PUT    /api/contracts/:id/status
+GET    /api/contracts/:id/milestones
+POST   /api/contracts/:id/milestones
+PUT    /api/contracts/:id/milestones/:milestoneId
+
+Payments:
+GET    /api/wallet
+GET    /api/wallet/transactions
+POST   /api/wallet/deposit
+POST   /api/wallet/withdraw
+POST   /api/escrow/fund
+POST   /api/escrow/release
+
+Messages:
+GET    /api/messages/threads
+GET    /api/messages/threads/:id
+POST   /api/messages/threads
+POST   /api/messages/threads/:id/messages
+WebSocket /ws/messages
+
+Reviews:
+GET    /api/reviews
+POST   /api/reviews
+GET    /api/reviews/:id
+
+Search:
+GET    /api/search/freelancers
+GET    /api/search/jobs
+GET    /api/search/categories
+
+Admin:
+GET    /api/admin/users
+GET    /api/admin/verifications
+PUT    /api/admin/verifications/:id
+GET    /api/admin/disputes
+PUT    /api/admin/disputes/:id
+GET    /api/admin/analytics
+```
+
+---
+
+## 5. Security Requirements
+
+### 5.1 Authentication & Authorization
+```
+- JWT with short expiry (15 min) + refresh tokens (7 days)
+- Refresh token rotation
+- Device tracking and session management
+- Role-based access control (RBAC)
+- Rate limiting per endpoint
+- Brute force protection (lockout after 5 failed attempts)
+```
+
+### 5.2 Data Protection
+```
+- All data encrypted at rest (AES-256)
+- All traffic over HTTPS (TLS 1.3)
+- PII encrypted in database (addresses, phone numbers)
+- ID documents stored encrypted with access logging
+- GDPR-compliant data handling
+- Right to deletion (account removal)
+```
+
+### 5.3 Payment Security
+```
+- PCI DSS compliance for card handling (via payment processor)
+- Escrow funds in segregated accounts
+- Transaction signing
+- Withdrawal verification (2FA required)
+- Fraud detection rules
+```
+
+### 5.4 Content Security
+```
+- Input sanitization (XSS prevention)
+- SQL injection prevention (parameterized queries)
+- CSRF tokens
+- Content Security Policy headers
+- File upload validation (type, size, malware scan)
+```
+
+---
+
+## 6. Performance Requirements
+
+### 6.1 Response Times
+```
+- API response: < 200ms (p95)
+- Search results: < 500ms
+- Page load: < 2s (initial), < 500ms (subsequent)
+- Real-time messages: < 100ms latency
+```
+
+### 6.2 Scalability
+```
+- Support 100,000 concurrent users
+- Handle 1,000 requests/second
+- Database: Read replicas for scaling
+- Horizontal scaling via container orchestration
+- CDN for static assets
+```
+
+### 6.3 Availability
+```
+- 99.9% uptime SLA
+- Automated failover
+- Daily backups with point-in-time recovery
+- Disaster recovery plan (RPO: 1 hour, RTO: 4 hours)
+```
+
+---
+
+## 7. Localization (i18n)
+
+### 7.1 Languages
+```
+Primary: Arabic (Lebanese dialect supported)
+Secondary: English
+Direction: RTL support throughout
+```
+
+### 7.2 Content Strategy
+```
+- All UI strings in both languages
+- User-generated content: original language + optional translation
+- Legal documents: Arabic primary, English secondary
+- Support: Arabic and English
+```
+
+### 7.3 Currency
+```
+- Primary: USD (for stability)
+- Display: Option to show LBP equivalent (live rate)
+- Platform accounting: USD only
+- Payment processing: USD
+```
+
+---
+
+## 8. Mobile Considerations
+
+### 8.1 Progressive Web App (PWA)
+```
+- Installable on home screen
+- Offline support (cached pages, queued actions)
+- Push notifications
+- Camera access (for ID verification)
+- Geolocation (for trade jobs)
+```
+
+### 8.2 Performance Optimization
+```
+- Image optimization (WebP, lazy loading)
+- Code splitting
+- Service worker caching
+- Low-bandwidth mode option
+- Offline message queuing
+```
+
+---
+
+## 9. Admin Panel Features
+
+### 9.1 Dashboard
+```
+- Active users
+- Jobs posted (daily/weekly/monthly)
+- Transactions volume
+- Pending verifications
+- Open disputes
+- Revenue metrics
+```
+
+### 9.2 User Management
+```
+- View/edit users
+- Verification queue
+- Suspend/ban users
+- Impersonate (for support)
+```
+
+### 9.3 Content Moderation
+```
+- Reported content queue
+- Job review (if flagged)
+- Message review (if reported)
+- Automated content filtering
+```
+
+### 9.4 Financial
+```
+- Transaction history
+- Withdrawal approvals
+- Escrow management
+- Fee adjustments
+- Refund processing
+```
+
+---
+
+## 10. Analytics & Tracking
+
+### 10.1 Product Analytics
+```
+- User signups and funnel
+- Job posting completion rate
+- Proposal submission rate
+- Hire rate
+- Contract completion rate
+- User retention
+- Feature usage
+```
+
+### 10.2 Business Metrics
+```
+- Gross Merchandise Value (GMV)
+- Take rate (fees collected)
+- Average contract value
+- Repeat client rate
+- Time to hire
+- Dispute rate
+```
+
+### 10.3 Tools
+```
+- Mixpanel or Amplitude for product analytics
+- Custom dashboards (Metabase)
+- A/B testing framework
+```
+
+---
+
+## 11. Launch Phases
+
+### Phase 1: MVP (Month 1-3)
+```
+- User registration + phone verification
+- Basic profiles
+- Job posting (fixed-price only)
+- Proposals
+- Simple contracts
+- OMT + Whish payments
+- Basic messaging
+- Reviews
+```
+
+### Phase 2: Core (Month 4-6)
+```
+- ID verification system
+- Hourly contracts + time tracking
+- Advanced search with filters
+- Quick Tasks feature
+- Bank transfer support
+- Dispute resolution
+- Admin panel v1
+```
+
+### Phase 3: Growth (Month 7-9)
+```
+- Mobile PWA optimization
+- Recommendation engine
+- Premium features (featured profiles, boosted jobs)
+- Analytics dashboard
+- API for partners
+- Referral program
+```
+
+### Phase 4: Scale (Month 10-12)
+```
+- Native mobile apps (optional)
+- Video calls integration
+- Advanced fraud detection
+- Enterprise accounts
+- Multi-country expansion prep
+```
+
+---
+
+## 12. Success Metrics
+
+### 12.1 North Star
+```
+- Monthly Gross Services Volume (GSV)
+```
+
+### 12.2 Key Metrics
+```
+- Monthly Active Users (MAU)
+- Jobs posted per month
+- Hire rate (jobs with at least one hire)
+- Freelancer earnings (average monthly)
+- Net Promoter Score (NPS)
+- Customer Acquisition Cost (CAC)
+- Lifetime Value (LTV)
+```
+
+---
+
+## 13. Appendix
+
+### A. Lebanese Governorates
+```
+- Beirut
+- Mount Lebanon
+- North Lebanon
+- South Lebanon
+- Bekaa
+- Nabatieh
+- Akkar
+- Baalbek-Hermel
+```
+
+### B. Competitor Analysis
+```
+- Upwork (global, no local payments)
+- Fiverr (gig-based, not project-based)
+- OLX Lebanon (classifieds, no escrow)
+- Facebook Groups (no protection)
+```
+
+### C. Legal Considerations
+```
+- Business registration in Lebanon
+- Terms of Service
+- Privacy Policy
+- Escrow license requirements
+- Tax implications (VAT)
+```
+
+---
+
+**Document End**
+
+*This TRD is a living document. Update as requirements evolve.*
