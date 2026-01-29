@@ -23,8 +23,21 @@ async function bootstrap() {
   // API prefix
   app.setGlobalPrefix('api');
 
-  const port = process.env.PORT || 3001;
-  await app.listen(port);
-  console.log(`🚀 Labbini API is running on: http://localhost:${port}/api`);
+  const port = parseInt(process.env.PORT, 10) || 3001;
+
+  try {
+    await app.listen(port);
+    console.log(`🚀 Labbini API is running on: http://localhost:${port}/api`);
+  } catch (error) {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${port} is already in use.`);
+      console.error(`   Fix: Kill the process using port ${port} or set a different PORT:`);
+      console.error(`   Windows: netstat -ano | findstr :${port}`);
+      console.error(`   Linux/Mac: lsof -i :${port}`);
+      console.error(`   Or run with: PORT=3002 pnpm dev:backend`);
+      process.exit(1);
+    }
+    throw error;
+  }
 }
 bootstrap();

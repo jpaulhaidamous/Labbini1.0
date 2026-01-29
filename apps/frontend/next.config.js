@@ -4,6 +4,7 @@ const withNextIntl = require('next-intl/plugin')('./i18n.ts');
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
+  distDir: '.next-local',
   images: {
     domains: ['localhost', 's3.amazonaws.com'],
   },
