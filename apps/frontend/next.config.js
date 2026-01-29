@@ -4,7 +4,7 @@ const withNextIntl = require('next-intl/plugin')('./i18n.ts');
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
-  distDir: 'C:/temp/labbini-next',
+  distDir: '.next-local',
   images: {
     remotePatterns: [
       {
