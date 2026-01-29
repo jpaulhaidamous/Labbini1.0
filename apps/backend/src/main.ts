@@ -23,7 +23,7 @@ async function bootstrap() {
   // API prefix
   app.setGlobalPrefix('api');
 
-  const port = parseInt(process.env.PORT, 10) || 3001;
+  const port = Number(process.env.PORT ?? 3001);
 
   try {
     await app.listen(port);
