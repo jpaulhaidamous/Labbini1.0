@@ -6,7 +6,16 @@ const nextConfig = {
   trailingSlash: false,
   distDir: '.next-local',
   images: {
-    domains: ['localhost', 's3.amazonaws.com'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 's3.amazonaws.com',
+      },
+    ],
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
