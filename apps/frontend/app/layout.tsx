@@ -1,6 +1,6 @@
+import "./globals.css";
 import { ReactNode } from "react";
 import { Cairo, Outfit } from "next/font/google";
-import "./globals.css";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -18,7 +18,6 @@ type Props = {
   children: ReactNode;
 };
 
-// Root layout – wraps the entire app
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">

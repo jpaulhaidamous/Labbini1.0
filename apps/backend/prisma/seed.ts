@@ -3,14 +3,22 @@ import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+// Fixed UUIDs for idempotent job seeding
+const JOB_UUID_1 = '11111111-1111-1111-1111-111111111111';
+const JOB_UUID_2 = '22222222-2222-2222-2222-222222222222';
+const JOB_UUID_3 = '33333333-3333-3333-3333-333333333333';
+
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // Create Categories
-  console.log('Creating categories...');
+  // ========== CREATE CATEGORIES ==========
+  console.log('Upserting categories...');
 
-  const digitalCreative = await prisma.category.create({
-    data: {
+  // Root Categories
+  const digitalCreative = await prisma.category.upsert({
+    where: { slug: 'digital-creative' },
+    update: {},
+    create: {
       nameEn: 'Digital & Creative',
       nameAr: 'خدمات رقمية وإبداعية',
       slug: 'digital-creative',
@@ -19,8 +27,10 @@ async function main() {
     },
   });
 
-  const professionalServices = await prisma.category.create({
-    data: {
+  const professionalServices = await prisma.category.upsert({
+    where: { slug: 'professional-services' },
+    update: {},
+    create: {
       nameEn: 'Professional Services',
       nameAr: 'خدمات مهنية',
       slug: 'professional-services',
@@ -29,8 +39,10 @@ async function main() {
     },
   });
 
-  const manualTrades = await prisma.category.create({
-    data: {
+  const manualTrades = await prisma.category.upsert({
+    where: { slug: 'manual-trades' },
+    update: {},
+    create: {
       nameEn: 'Manual Trades',
       nameAr: 'الحرف اليدوية',
       slug: 'manual-trades',
@@ -39,8 +51,10 @@ async function main() {
     },
   });
 
-  const eventsPersonal = await prisma.category.create({
-    data: {
+  const eventsPersonal = await prisma.category.upsert({
+    where: { slug: 'events-personal' },
+    update: {},
+    create: {
       nameEn: 'Events & Personal',
       nameAr: 'فعاليات وخدمات شخصية',
       slug: 'events-personal',
@@ -50,8 +64,10 @@ async function main() {
   });
 
   // Digital & Creative Subcategories
-  const webDev = await prisma.category.create({
-    data: {
+  const webDev = await prisma.category.upsert({
+    where: { slug: 'web-development' },
+    update: {},
+    create: {
       nameEn: 'Web Development',
       nameAr: 'تطوير المواقع',
       slug: 'web-development',
@@ -60,8 +76,10 @@ async function main() {
     },
   });
 
-  const mobileDev = await prisma.category.create({
-    data: {
+  const mobileDev = await prisma.category.upsert({
+    where: { slug: 'mobile-development' },
+    update: {},
+    create: {
       nameEn: 'Mobile Development',
       nameAr: 'تطوير التطبيقات',
       slug: 'mobile-development',
@@ -70,8 +88,10 @@ async function main() {
     },
   });
 
-  const graphicDesign = await prisma.category.create({
-    data: {
+  const graphicDesign = await prisma.category.upsert({
+    where: { slug: 'graphic-design' },
+    update: {},
+    create: {
       nameEn: 'Graphic Design',
       nameAr: 'التصميم الجرافيكي',
       slug: 'graphic-design',
@@ -80,8 +100,10 @@ async function main() {
     },
   });
 
-  const videoAnimation = await prisma.category.create({
-    data: {
+  const videoAnimation = await prisma.category.upsert({
+    where: { slug: 'video-animation' },
+    update: {},
+    create: {
       nameEn: 'Video & Animation',
       nameAr: 'فيديو ورسوم متحركة',
       slug: 'video-animation',
@@ -90,8 +112,10 @@ async function main() {
     },
   });
 
-  const writingTranslation = await prisma.category.create({
-    data: {
+  const writingTranslation = await prisma.category.upsert({
+    where: { slug: 'writing-translation' },
+    update: {},
+    create: {
       nameEn: 'Writing & Translation',
       nameAr: 'كتابة وترجمة',
       slug: 'writing-translation',
@@ -100,8 +124,10 @@ async function main() {
     },
   });
 
-  const digitalMarketing = await prisma.category.create({
-    data: {
+  const digitalMarketing = await prisma.category.upsert({
+    where: { slug: 'digital-marketing' },
+    update: {},
+    create: {
       nameEn: 'Digital Marketing',
       nameAr: 'تسويق رقمي',
       slug: 'digital-marketing',
@@ -111,8 +137,10 @@ async function main() {
   });
 
   // Professional Services Subcategories
-  const accounting = await prisma.category.create({
-    data: {
+  const accounting = await prisma.category.upsert({
+    where: { slug: 'accounting-finance' },
+    update: {},
+    create: {
       nameEn: 'Accounting & Finance',
       nameAr: 'محاسبة ومالية',
       slug: 'accounting-finance',
@@ -121,8 +149,10 @@ async function main() {
     },
   });
 
-  const legalServices = await prisma.category.create({
-    data: {
+  const legalServices = await prisma.category.upsert({
+    where: { slug: 'legal-services' },
+    update: {},
+    create: {
       nameEn: 'Legal Services',
       nameAr: 'خدمات قانونية',
       slug: 'legal-services',
@@ -131,8 +161,10 @@ async function main() {
     },
   });
 
-  const teaching = await prisma.category.create({
-    data: {
+  const teaching = await prisma.category.upsert({
+    where: { slug: 'teaching-tutoring' },
+    update: {},
+    create: {
       nameEn: 'Teaching & Tutoring',
       nameAr: 'تدريس وتعليم',
       slug: 'teaching-tutoring',
@@ -142,8 +174,10 @@ async function main() {
   });
 
   // Manual Trades Subcategories
-  const plumbing = await prisma.category.create({
-    data: {
+  const plumbing = await prisma.category.upsert({
+    where: { slug: 'plumbing' },
+    update: {},
+    create: {
       nameEn: 'Plumbing',
       nameAr: 'سباكة',
       slug: 'plumbing',
@@ -152,8 +186,10 @@ async function main() {
     },
   });
 
-  const electrical = await prisma.category.create({
-    data: {
+  const electrical = await prisma.category.upsert({
+    where: { slug: 'electrical' },
+    update: {},
+    create: {
       nameEn: 'Electrical',
       nameAr: 'كهرباء',
       slug: 'electrical',
@@ -162,8 +198,10 @@ async function main() {
     },
   });
 
-  const carpentry = await prisma.category.create({
-    data: {
+  const carpentry = await prisma.category.upsert({
+    where: { slug: 'carpentry' },
+    update: {},
+    create: {
       nameEn: 'Carpentry',
       nameAr: 'نجارة',
       slug: 'carpentry',
@@ -172,8 +210,10 @@ async function main() {
     },
   });
 
-  const painting = await prisma.category.create({
-    data: {
+  const painting = await prisma.category.upsert({
+    where: { slug: 'painting' },
+    update: {},
+    create: {
       nameEn: 'Painting',
       nameAr: 'دهان',
       slug: 'painting',
@@ -182,8 +222,10 @@ async function main() {
     },
   });
 
-  const hvac = await prisma.category.create({
-    data: {
+  const hvac = await prisma.category.upsert({
+    where: { slug: 'hvac-ac-repair' },
+    update: {},
+    create: {
       nameEn: 'HVAC / AC Repair',
       nameAr: 'تكييف وتبريد',
       slug: 'hvac-ac-repair',
@@ -192,8 +234,10 @@ async function main() {
     },
   });
 
-  const cleaning = await prisma.category.create({
-    data: {
+  const cleaning = await prisma.category.upsert({
+    where: { slug: 'cleaning-services' },
+    update: {},
+    create: {
       nameEn: 'Cleaning Services',
       nameAr: 'تنظيف',
       slug: 'cleaning-services',
@@ -203,8 +247,10 @@ async function main() {
   });
 
   // Events & Personal Subcategories
-  const catering = await prisma.category.create({
-    data: {
+  const catering = await prisma.category.upsert({
+    where: { slug: 'catering' },
+    update: {},
+    create: {
       nameEn: 'Catering',
       nameAr: 'تموين وتقديم طعام',
       slug: 'catering',
@@ -213,8 +259,10 @@ async function main() {
     },
   });
 
-  const eventPlanning = await prisma.category.create({
-    data: {
+  const eventPlanning = await prisma.category.upsert({
+    where: { slug: 'event-planning' },
+    update: {},
+    create: {
       nameEn: 'Event Planning',
       nameAr: 'تنظيم فعاليات',
       slug: 'event-planning',
@@ -223,116 +271,70 @@ async function main() {
     },
   });
 
-  console.log('✅ Categories created');
+  console.log('✅ Categories upserted');
 
-  // Create Skills
-  console.log('Creating skills...');
+  // ========== CREATE SKILLS ==========
+  console.log('Upserting skills...');
 
-  const webDevSkills = [
-    { en: 'React.js', ar: 'React.js' },
-    { en: 'Vue.js', ar: 'Vue.js' },
-    { en: 'Angular', ar: 'Angular' },
-    { en: 'Node.js', ar: 'Node.js' },
-    { en: 'PHP', ar: 'PHP' },
-    { en: 'Laravel', ar: 'Laravel' },
-    { en: 'WordPress', ar: 'WordPress' },
-    { en: 'HTML/CSS', ar: 'HTML/CSS' },
+  const skillsData = [
+    // Web Development
+    { en: 'React.js', ar: 'React.js', categoryId: webDev.id },
+    { en: 'Vue.js', ar: 'Vue.js', categoryId: webDev.id },
+    { en: 'Angular', ar: 'Angular', categoryId: webDev.id },
+    { en: 'Node.js', ar: 'Node.js', categoryId: webDev.id },
+    { en: 'PHP', ar: 'PHP', categoryId: webDev.id },
+    { en: 'Laravel', ar: 'Laravel', categoryId: webDev.id },
+    { en: 'WordPress', ar: 'WordPress', categoryId: webDev.id },
+    { en: 'HTML/CSS', ar: 'HTML/CSS', categoryId: webDev.id },
+    // Mobile Development
+    { en: 'React Native', ar: 'React Native', categoryId: mobileDev.id },
+    { en: 'Flutter', ar: 'Flutter', categoryId: mobileDev.id },
+    { en: 'iOS Development', ar: 'تطوير iOS', categoryId: mobileDev.id },
+    { en: 'Android Development', ar: 'تطوير Android', categoryId: mobileDev.id },
+    // Graphic Design
+    { en: 'Adobe Photoshop', ar: 'فوتوشوب', categoryId: graphicDesign.id },
+    { en: 'Adobe Illustrator', ar: 'اليستريتور', categoryId: graphicDesign.id },
+    { en: 'Figma', ar: 'Figma', categoryId: graphicDesign.id },
+    { en: 'Logo Design', ar: 'تصميم شعارات', categoryId: graphicDesign.id },
+    { en: 'Branding', ar: 'تصميم هوية', categoryId: graphicDesign.id },
+    // Writing & Translation
+    { en: 'Content Writing', ar: 'كتابة محتوى', categoryId: writingTranslation.id },
+    { en: 'Copywriting', ar: 'كتابة إعلانية', categoryId: writingTranslation.id },
+    { en: 'Translation (Arabic-English)', ar: 'ترجمة (عربي-إنجليزي)', categoryId: writingTranslation.id },
+    { en: 'Proofreading', ar: 'تدقيق لغوي', categoryId: writingTranslation.id },
+    // Digital Marketing
+    { en: 'Social Media Marketing', ar: 'تسويق عبر السوشيال ميديا', categoryId: digitalMarketing.id },
+    { en: 'SEO', ar: 'تحسين محركات البحث', categoryId: digitalMarketing.id },
+    { en: 'Google Ads', ar: 'إعلانات جوجل', categoryId: digitalMarketing.id },
+    { en: 'Facebook Ads', ar: 'إعلانات فيسبوك', categoryId: digitalMarketing.id },
   ];
 
-  for (const skill of webDevSkills) {
-    await prisma.skill.create({
-      data: {
+  for (const skill of skillsData) {
+    const slug = skill.en.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    await prisma.skill.upsert({
+      where: { slug },
+      update: {},
+      create: {
         nameEn: skill.en,
         nameAr: skill.ar,
-        slug: skill.en.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        categoryId: webDev.id,
+        slug,
+        categoryId: skill.categoryId,
       },
     });
   }
 
-  const mobileDevSkills = [
-    { en: 'React Native', ar: 'React Native' },
-    { en: 'Flutter', ar: 'Flutter' },
-    { en: 'iOS Development', ar: 'تطوير iOS' },
-    { en: 'Android Development', ar: 'تطوير Android' },
-  ];
+  console.log('✅ Skills upserted');
 
-  for (const skill of mobileDevSkills) {
-    await prisma.skill.create({
-      data: {
-        nameEn: skill.en,
-        nameAr: skill.ar,
-        slug: skill.en.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        categoryId: mobileDev.id,
-      },
-    });
-  }
-
-  const graphicDesignSkills = [
-    { en: 'Adobe Photoshop', ar: 'فوتوشوب' },
-    { en: 'Adobe Illustrator', ar: 'اليستريتور' },
-    { en: 'Figma', ar: 'Figma' },
-    { en: 'Logo Design', ar: 'تصميم شعارات' },
-    { en: 'Branding', ar: 'تصميم هوية' },
-  ];
-
-  for (const skill of graphicDesignSkills) {
-    await prisma.skill.create({
-      data: {
-        nameEn: skill.en,
-        nameAr: skill.ar,
-        slug: skill.en.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        categoryId: graphicDesign.id,
-      },
-    });
-  }
-
-  const writingSkills = [
-    { en: 'Content Writing', ar: 'كتابة محتوى' },
-    { en: 'Copywriting', ar: 'كتابة إعلانية' },
-    { en: 'Translation (Arabic-English)', ar: 'ترجمة (عربي-إنجليزي)' },
-    { en: 'Proofreading', ar: 'تدقيق لغوي' },
-  ];
-
-  for (const skill of writingSkills) {
-    await prisma.skill.create({
-      data: {
-        nameEn: skill.en,
-        nameAr: skill.ar,
-        slug: skill.en.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        categoryId: writingTranslation.id,
-      },
-    });
-  }
-
-  const digitalMarketingSkills = [
-    { en: 'Social Media Marketing', ar: 'تسويق عبر السوشيال ميديا' },
-    { en: 'SEO', ar: 'تحسين محركات البحث' },
-    { en: 'Google Ads', ar: 'إعلانات جوجل' },
-    { en: 'Facebook Ads', ar: 'إعلانات فيسبوك' },
-  ];
-
-  for (const skill of digitalMarketingSkills) {
-    await prisma.skill.create({
-      data: {
-        nameEn: skill.en,
-        nameAr: skill.ar,
-        slug: skill.en.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        categoryId: digitalMarketing.id,
-      },
-    });
-  }
-
-  console.log('✅ Skills created');
-
-  // Create Test Users
-  console.log('Creating test users...');
+  // ========== CREATE TEST USERS ==========
+  console.log('Upserting test users...');
 
   const hashedPassword = await bcrypt.hash('password123', 10);
 
   // Test Client
-  const testClient = await prisma.user.create({
-    data: {
+  const testClient = await prisma.user.upsert({
+    where: { email: 'client@labbini.com' },
+    update: {},
+    create: {
       email: 'client@labbini.com',
       phone: '+96170123456',
       passwordHash: hashedPassword,
@@ -340,25 +342,37 @@ async function main() {
       verificationLevel: 'LEVEL_1',
       emailVerified: true,
       phoneVerified: true,
-      profile: {
-        create: {
-          displayNameEn: 'Ahmad Khalil',
-          displayNameAr: 'أحمد خليل',
-          governorate: 'Beirut',
-          city: 'Beirut',
-        },
-      },
-      wallet: {
-        create: {
-          availableBalance: 1000,
-        },
-      },
+    },
+  });
+
+  // Upsert client profile
+  await prisma.profile.upsert({
+    where: { userId: testClient.id },
+    update: {},
+    create: {
+      userId: testClient.id,
+      displayNameEn: 'Ahmad Khalil',
+      displayNameAr: 'أحمد خليل',
+      governorate: 'Beirut',
+      city: 'Beirut',
+    },
+  });
+
+  // Upsert client wallet
+  await prisma.wallet.upsert({
+    where: { userId: testClient.id },
+    update: {},
+    create: {
+      userId: testClient.id,
+      availableBalance: 1000,
     },
   });
 
   // Test Freelancer 1 - Web Developer
-  const freelancer1 = await prisma.user.create({
-    data: {
+  const freelancer1 = await prisma.user.upsert({
+    where: { email: 'freelancer1@labbini.com' },
+    update: {},
+    create: {
       email: 'freelancer1@labbini.com',
       phone: '+96171234567',
       passwordHash: hashedPassword,
@@ -366,30 +380,38 @@ async function main() {
       verificationLevel: 'LEVEL_2',
       emailVerified: true,
       phoneVerified: true,
-      profile: {
-        create: {
-          displayNameEn: 'Sara Mansour',
-          displayNameAr: 'سارة منصور',
-          bioEn: 'Full-stack web developer with 5 years of experience specializing in React and Node.js',
-          bioAr: 'مطورة مواقع متكاملة مع 5 سنوات خبرة متخصصة في React و Node.js',
-          governorate: 'Mount Lebanon',
-          city: 'Jounieh',
-          hourlyRate: 25,
-          isAvailable: true,
-          jobSuccessScore: 95,
-          totalEarned: 12500,
-          totalJobsCompleted: 42,
-          languages: ['Arabic', 'English', 'French'],
-          responseTime: 2,
-        },
-      },
-      wallet: {
-        create: {
-          availableBalance: 450,
-          totalEarned: 12500,
-          totalWithdrawn: 12050,
-        },
-      },
+    },
+  });
+
+  const freelancer1Profile = await prisma.profile.upsert({
+    where: { userId: freelancer1.id },
+    update: {},
+    create: {
+      userId: freelancer1.id,
+      displayNameEn: 'Sara Mansour',
+      displayNameAr: 'سارة منصور',
+      bioEn: 'Full-stack web developer with 5 years of experience specializing in React and Node.js',
+      bioAr: 'مطورة مواقع متكاملة مع 5 سنوات خبرة متخصصة في React و Node.js',
+      governorate: 'Mount Lebanon',
+      city: 'Jounieh',
+      hourlyRate: 25,
+      isAvailable: true,
+      jobSuccessScore: 95,
+      totalEarned: 12500,
+      totalJobsCompleted: 42,
+      languages: ['Arabic', 'English', 'French'],
+      responseTime: 2,
+    },
+  });
+
+  await prisma.wallet.upsert({
+    where: { userId: freelancer1.id },
+    update: {},
+    create: {
+      userId: freelancer1.id,
+      availableBalance: 450,
+      totalEarned: 12500,
+      totalWithdrawn: 12050,
     },
   });
 
@@ -397,21 +419,43 @@ async function main() {
   const reactSkill = await prisma.skill.findFirst({ where: { slug: 'react-js' } });
   const nodeSkill = await prisma.skill.findFirst({ where: { slug: 'node-js' } });
 
-  if (reactSkill && nodeSkill && freelancer1.profile) {
-    const profile1 = await prisma.profile.findUnique({ where: { userId: freelancer1.id } });
-    if (profile1) {
-      await prisma.profileSkill.createMany({
-        data: [
-          { profileId: profile1.id, skillId: reactSkill.id },
-          { profileId: profile1.id, skillId: nodeSkill.id },
-        ],
-      });
-    }
+  if (reactSkill) {
+    await prisma.profileSkill.upsert({
+      where: {
+        profileId_skillId: {
+          profileId: freelancer1Profile.id,
+          skillId: reactSkill.id,
+        },
+      },
+      update: {},
+      create: {
+        profileId: freelancer1Profile.id,
+        skillId: reactSkill.id,
+      },
+    });
+  }
+
+  if (nodeSkill) {
+    await prisma.profileSkill.upsert({
+      where: {
+        profileId_skillId: {
+          profileId: freelancer1Profile.id,
+          skillId: nodeSkill.id,
+        },
+      },
+      update: {},
+      create: {
+        profileId: freelancer1Profile.id,
+        skillId: nodeSkill.id,
+      },
+    });
   }
 
   // Test Freelancer 2 - Plumber
-  const freelancer2 = await prisma.user.create({
-    data: {
+  const freelancer2 = await prisma.user.upsert({
+    where: { email: 'freelancer2@labbini.com' },
+    update: {},
+    create: {
       email: 'freelancer2@labbini.com',
       phone: '+96176543210',
       passwordHash: hashedPassword,
@@ -419,36 +463,46 @@ async function main() {
       verificationLevel: 'LEVEL_2',
       emailVerified: true,
       phoneVerified: true,
-      profile: {
-        create: {
-          displayNameEn: 'Mahmoud Harb',
-          displayNameAr: 'محمود حرب',
-          bioEn: 'Professional plumber with 10 years of experience in residential and commercial projects',
-          bioAr: 'سباك محترف مع 10 سنوات خبرة في المشاريع السكنية والتجارية',
-          governorate: 'Beirut',
-          city: 'Beirut',
-          hourlyRate: 15,
-          isAvailable: true,
-          jobSuccessScore: 98,
-          totalEarned: 8900,
-          totalJobsCompleted: 156,
-          languages: ['Arabic'],
-          responseTime: 1,
-        },
-      },
-      wallet: {
-        create: {
-          availableBalance: 320,
-          totalEarned: 8900,
-          totalWithdrawn: 8580,
-        },
-      },
+    },
+  });
+
+  await prisma.profile.upsert({
+    where: { userId: freelancer2.id },
+    update: {},
+    create: {
+      userId: freelancer2.id,
+      displayNameEn: 'Mahmoud Harb',
+      displayNameAr: 'محمود حرب',
+      bioEn: 'Professional plumber with 10 years of experience in residential and commercial projects',
+      bioAr: 'سباك محترف مع 10 سنوات خبرة في المشاريع السكنية والتجارية',
+      governorate: 'Beirut',
+      city: 'Beirut',
+      hourlyRate: 15,
+      isAvailable: true,
+      jobSuccessScore: 98,
+      totalEarned: 8900,
+      totalJobsCompleted: 156,
+      languages: ['Arabic'],
+      responseTime: 1,
+    },
+  });
+
+  await prisma.wallet.upsert({
+    where: { userId: freelancer2.id },
+    update: {},
+    create: {
+      userId: freelancer2.id,
+      availableBalance: 320,
+      totalEarned: 8900,
+      totalWithdrawn: 8580,
     },
   });
 
   // Test Freelancer 3 - Graphic Designer
-  const freelancer3 = await prisma.user.create({
-    data: {
+  const freelancer3 = await prisma.user.upsert({
+    where: { email: 'freelancer3@labbini.com' },
+    update: {},
+    create: {
       email: 'freelancer3@labbini.com',
       phone: '+96178987654',
       passwordHash: hashedPassword,
@@ -456,30 +510,38 @@ async function main() {
       verificationLevel: 'LEVEL_1',
       emailVerified: true,
       phoneVerified: true,
-      profile: {
-        create: {
-          displayNameEn: 'Lina Farah',
-          displayNameAr: 'لينا فرح',
-          bioEn: 'Creative graphic designer passionate about branding and visual identity',
-          bioAr: 'مصممة جرافيك مبدعة شغوفة بالعلامات التجارية والهوية البصرية',
-          governorate: 'North Lebanon',
-          city: 'Tripoli',
-          hourlyRate: 20,
-          isAvailable: true,
-          jobSuccessScore: 92,
-          totalEarned: 5400,
-          totalJobsCompleted: 28,
-          languages: ['Arabic', 'English'],
-          responseTime: 3,
-        },
-      },
-      wallet: {
-        create: {
-          availableBalance: 200,
-          totalEarned: 5400,
-          totalWithdrawn: 5200,
-        },
-      },
+    },
+  });
+
+  const freelancer3Profile = await prisma.profile.upsert({
+    where: { userId: freelancer3.id },
+    update: {},
+    create: {
+      userId: freelancer3.id,
+      displayNameEn: 'Lina Farah',
+      displayNameAr: 'لينا فرح',
+      bioEn: 'Creative graphic designer passionate about branding and visual identity',
+      bioAr: 'مصممة جرافيك مبدعة شغوفة بالعلامات التجارية والهوية البصرية',
+      governorate: 'North Lebanon',
+      city: 'Tripoli',
+      hourlyRate: 20,
+      isAvailable: true,
+      jobSuccessScore: 92,
+      totalEarned: 5400,
+      totalJobsCompleted: 28,
+      languages: ['Arabic', 'English'],
+      responseTime: 3,
+    },
+  });
+
+  await prisma.wallet.upsert({
+    where: { userId: freelancer3.id },
+    update: {},
+    create: {
+      userId: freelancer3.id,
+      availableBalance: 200,
+      totalEarned: 5400,
+      totalWithdrawn: 5200,
     },
   });
 
@@ -487,25 +549,48 @@ async function main() {
   const photoshopSkill = await prisma.skill.findFirst({ where: { slug: 'adobe-photoshop' } });
   const illustratorSkill = await prisma.skill.findFirst({ where: { slug: 'adobe-illustrator' } });
 
-  if (photoshopSkill && illustratorSkill) {
-    const profile3 = await prisma.profile.findUnique({ where: { userId: freelancer3.id } });
-    if (profile3) {
-      await prisma.profileSkill.createMany({
-        data: [
-          { profileId: profile3.id, skillId: photoshopSkill.id },
-          { profileId: profile3.id, skillId: illustratorSkill.id },
-        ],
-      });
-    }
+  if (photoshopSkill) {
+    await prisma.profileSkill.upsert({
+      where: {
+        profileId_skillId: {
+          profileId: freelancer3Profile.id,
+          skillId: photoshopSkill.id,
+        },
+      },
+      update: {},
+      create: {
+        profileId: freelancer3Profile.id,
+        skillId: photoshopSkill.id,
+      },
+    });
   }
 
-  console.log('✅ Test users created');
+  if (illustratorSkill) {
+    await prisma.profileSkill.upsert({
+      where: {
+        profileId_skillId: {
+          profileId: freelancer3Profile.id,
+          skillId: illustratorSkill.id,
+        },
+      },
+      update: {},
+      create: {
+        profileId: freelancer3Profile.id,
+        skillId: illustratorSkill.id,
+      },
+    });
+  }
 
-  // Create Sample Job
-  console.log('Creating sample job...');
+  console.log('✅ Test users upserted');
 
-  const sampleJob = await prisma.job.create({
-    data: {
+  // ========== CREATE SAMPLE JOBS ==========
+  console.log('Upserting sample jobs...');
+
+  await prisma.job.upsert({
+    where: { id: JOB_UUID_1 },
+    update: {},
+    create: {
+      id: JOB_UUID_1,
       clientId: testClient.id,
       categoryId: webDev.id,
       titleEn: 'Build an E-commerce Website',
@@ -520,14 +605,68 @@ async function main() {
       budgetMax: 3000,
       locationType: 'REMOTE',
       startDate: new Date(),
-      endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 days from now
+      endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
       isUrgent: false,
       visibility: 'PUBLIC',
       status: 'OPEN',
     },
   });
 
-  console.log('✅ Sample job created');
+  await prisma.job.upsert({
+    where: { id: JOB_UUID_2 },
+    update: {},
+    create: {
+      id: JOB_UUID_2,
+      clientId: testClient.id,
+      categoryId: graphicDesign.id,
+      titleEn: 'Design Logo for Startup',
+      titleAr: 'تصميم شعار لشركة ناشئة',
+      descriptionEn:
+        'Need a creative designer to create a modern logo for my tech startup. Should be minimalist and professional.',
+      descriptionAr:
+        'أحتاج مصمم مبدع لإنشاء شعار حديث لشركتي الناشئة التقنية. يجب أن يكون بسيطاً واحترافياً.',
+      jobType: 'FIXED',
+      budgetType: 'FIXED',
+      budgetMin: 150,
+      budgetMax: 150,
+      locationType: 'REMOTE',
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+      isUrgent: true,
+      visibility: 'PUBLIC',
+      status: 'OPEN',
+    },
+  });
+
+  await prisma.job.upsert({
+    where: { id: JOB_UUID_3 },
+    update: {},
+    create: {
+      id: JOB_UUID_3,
+      clientId: testClient.id,
+      categoryId: plumbing.id,
+      titleEn: 'Fix Kitchen Sink Leak',
+      titleAr: 'إصلاح تسريب حوض المطبخ',
+      descriptionEn:
+        'Kitchen sink has a leak under the cabinet. Need a professional plumber to come fix it ASAP.',
+      descriptionAr:
+        'حوض المطبخ يوجد به تسريب تحت الخزانة. أحتاج سباك محترف لإصلاحه بأسرع وقت.',
+      jobType: 'QUICK',
+      budgetType: 'HOURLY',
+      budgetMin: 15,
+      budgetMax: 25,
+      locationType: 'ONSITE',
+      governorate: 'Beirut',
+      city: 'Beirut',
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      isUrgent: true,
+      visibility: 'PUBLIC',
+      status: 'OPEN',
+    },
+  });
+
+  console.log('✅ Sample jobs upserted');
 
   console.log('🎉 Seed completed successfully!');
   console.log('\nTest Accounts:');
@@ -545,7 +684,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('Error during seed:', e);
+    console.error('❌ Error during seed:', e);
     process.exit(1);
   })
   .finally(async () => {
