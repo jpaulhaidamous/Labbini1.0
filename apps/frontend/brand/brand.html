@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labbini - Brand Identity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary Palette - Warm & Trustworthy */
+      --cedar-green: #1B5E4A;
+      --cedar-light: #2D7A62;
+      --sunset-gold: #E8A945;
+      --sunset-warm: #F4C06F;
+      --earth-brown: #8B6F4E;
+      
+      /* Neutrals */
+      --cream: #FDF8F3;
+      --sand: #F5EDE3;
+      --charcoal: #2C2C2C;
+      --slate: #5A5A5A;
+      
+      /* Accents */
+      --terracotta: #C75D3A;
+      --sea-blue: #3D7A8C;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+    
+    /* Header */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    
+    .brand-header h1 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--cedar-green);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    
+    .brand-header p {
+      color: var(--slate);
+      font-size: 1rem;
+    }
+    
+    /* Logo Section */
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 100px;
+    }
+    
+    .logo-primary {
+      position: relative;
+      margin-bottom: 60px;
+    }
+    
+    .logo-mark {
+      width: 180px;
+      height: 180px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* The Logo - Abstract "Hand Reaching" / "L" shape with Lebanese warmth */
+    .logo-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .logo-wordmark {
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .logo-wordmark h2 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--cedar-green);
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+    
+    .logo-wordmark .arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--sunset-gold);
+      margin-top: 5px;
+      direction: rtl;
+    }
+    
+    .logo-wordmark .tagline {
+      font-size: 1rem;
+      color: var(--slate);
+      margin-top: 15px;
+      font-weight: 500;
+      letter-spacing: 2px;
+    }
+    
+    /* Logo Variations */
+    .logo-variations {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 100px;
+    }
+    
+    .variation {
+      padding: 50px 30px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 250px;
+    }
+    
+    .variation.light {
+      background: white;
+      box-shadow: 0 4px 30px rgba(27, 94, 74, 0.08);
+    }
+    
+    .variation.dark {
+      background: var(--charcoal);
+    }
+    
+    .variation.green {
+      background: var(--cedar-green);
+    }
+    
+    .variation-label {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--slate);
+      font-weight: 500;
+    }
+    
+    .variation.dark .variation-label,
+    .variation.green .variation-label {
+      color: rgba(255,255,255,0.6);
+    }
+    
+    /* Color Palette */
+    .palette-section {
+      margin-bottom: 100px;
+    }
+    
+    .section-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cedar-green);
+      margin-bottom: 40px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid var(--sunset-gold);
+      display: inline-block;
+    }
+    
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+    }
+    
+    .color-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    
+    .color-swatch {
+      height: 120px;
+      position: relative;
+    }
+    
+    .color-info {
+      padding: 20px;
+    }
+    
+    .color-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--charcoal);
+    }
+    
+    .color-hex {
+      font-family: 'Outfit', monospace;
+      font-size: 0.85rem;
+      color: var(--slate);
+    }
+    
+    .color-use {
+      font-size: 0.75rem;
+      color: var(--slate);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    
+    /* Typography */
+    .typography-section {
+      margin-bottom: 100px;
+    }
+    
+    .type-showcase {
+      background: white;
+      border-radius: 24px;
+      padding: 60px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+    }
+    
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      padding: 30px 0;
+      border-bottom: 1px solid var(--sand);
+    }
+    
+    .type-row:last-child {
+      border-bottom: none;
+    }
+    
+    .type-label {
+      width: 200px;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      color: var(--slate);
+      font-weight: 500;
+    }
+    
+    .type-sample {
+      flex: 1;
+    }
+    
+    .type-sample.arabic {
+      direction: rtl;
+      text-align: right;
+    }
+    
+    .display-text {
+      font-family: 'Cairo', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--cedar-green);
+      line-height: 1.1;
+    }
+    
+    .heading-text {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+    
+    .body-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+    
+    .arabic-display {
+      font-family: 'Cairo', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--cedar-green);
+    }
+    
+    .arabic-body {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.2rem;
+      color: var(--slate);
+      line-height: 1.8;
+    }
+    
+    /* Brand Values */
+    .values-section {
+      margin-bottom: 80px;
+    }
+    
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    
+    .value-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border-left: 4px solid var(--sunset-gold);
+    }
+    
+    .value-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--sand);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .value-card h3 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--cedar-green);
+      margin-bottom: 10px;
+    }
+    
+    .value-card p {
+      font-size: 0.95rem;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .color-grid,
+      .logo-variations,
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .color-grid,
+      .logo-variations,
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .logo-wordmark h2 {
+        font-size: 3rem;
+      }
+      
+      .type-row {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .type-label {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="brand-header">
+      <h1>Brand Identity Guide</h1>
+      <p>Labbini - Lebanon's Freelance & Services Marketplace</p>
+    </header>
+    
+    <!-- Primary Logo -->
+    <section class="logo-section">
+      <div class="logo-primary">
+        <div class="logo-mark">
+          <svg class="logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background circle with gradient -->
+            <defs>
+              <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1B5E4A"/>
+                <stop offset="100%" style="stop-color:#2D7A62"/>
+              </linearGradient>
+              <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#E8A945"/>
+                <stop offset="100%" style="stop-color:#F4C06F"/>
+              </linearGradient>
+            </defs>
+            
+            <!-- Main circle -->
+            <circle cx="100" cy="100" r="95" fill="url(#logoGradient)"/>
+            
+            <!-- Abstract "reaching hand" / connection symbol -->
+            <!-- Two hands meeting / "L" shape integrated with connection -->
+            <path d="M60 130 L60 75 C60 65 68 58 78 58 L95 58" 
+                  stroke="#FDF8F3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            
+            <path d="M140 70 L140 125 C140 135 132 142 122 142 L105 142" 
+                  stroke="url(#accentGradient)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            
+            <!-- Connection dots - representing people meeting -->
+            <circle cx="105" cy="58" r="10" fill="#FDF8F3"/>
+            <circle cx="95" cy="142" r="10" fill="url(#accentGradient)"/>
+            
+            <!-- Center connection line -->
+            <path d="M100 75 L100 125" stroke="#FDF8F3" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+          </svg>
+        </div>
+        
+        <div class="logo-wordmark">
+          <h2>Labbini</h2>
+          <div class="arabic">لبّيني</div>
+          <p class="tagline">Answer the Call</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Logo Variations -->
+    <section class="logo-variations">
+      <div class="variation light">
+        <svg width="120" height="50" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="35" fill="#1B5E4A"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#FDF8F3" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#FDF8F3"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+          <text x="90" y="50" font-family="Cairo" font-weight="800" font-size="36" fill="#1B5E4A">Labbini</text>
+        </svg>
+        <span class="variation-label">Primary - Light Background</span>
+      </div>
+      
+      <div class="variation dark">
+        <svg width="120" height="50" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="35" fill="#FDF8F3"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#1B5E4A" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#1B5E4A"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+          <text x="90" y="50" font-family="Cairo" font-weight="800" font-size="36" fill="#FDF8F3">Labbini</text>
+        </svg>
+        <span class="variation-label">Inverted - Dark Background</span>
+      </div>
+      
+      <div class="variation green">
+        <svg width="120" height="50" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="35" fill="#FDF8F3"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#1B5E4A" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#1B5E4A"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+          <text x="90" y="50" font-family="Cairo" font-weight="800" font-size="36" fill="#FDF8F3">Labbini</text>
+        </svg>
+        <span class="variation-label">White - Brand Background</span>
+      </div>
+    </section>
+    
+    <!-- Color Palette -->
+    <section class="palette-section">
+      <h2 class="section-title">Color Palette</h2>
+      
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background: #1B5E4A;"></div>
+          <div class="color-info">
+            <div class="color-name">Cedar Green</div>
+            <div class="color-hex">#1B5E4A</div>
+            <div class="color-use">Primary brand color. Headers, buttons, trust elements.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #E8A945;"></div>
+          <div class="color-info">
+            <div class="color-name">Sunset Gold</div>
+            <div class="color-hex">#E8A945</div>
+            <div class="color-use">Accent color. CTAs, highlights, achievements.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #C75D3A;"></div>
+          <div class="color-info">
+            <div class="color-name">Terracotta</div>
+            <div class="color-hex">#C75D3A</div>
+            <div class="color-use">Alerts, urgent actions, manual labor category.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #3D7A8C;"></div>
+          <div class="color-info">
+            <div class="color-name">Sea Blue</div>
+            <div class="color-hex">#3D7A8C</div>
+            <div class="color-use">Tech/digital category, links, info states.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #8B6F4E;"></div>
+          <div class="color-info">
+            <div class="color-name">Earth Brown</div>
+            <div class="color-hex">#8B6F4E</div>
+            <div class="color-use">Professional services, craftsmanship.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #FDF8F3;"></div>
+          <div class="color-info">
+            <div class="color-name">Cream</div>
+            <div class="color-hex">#FDF8F3</div>
+            <div class="color-use">Primary background. Warm, welcoming.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #F5EDE3;"></div>
+          <div class="color-info">
+            <div class="color-name">Sand</div>
+            <div class="color-hex">#F5EDE3</div>
+            <div class="color-use">Secondary background, cards, dividers.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #2C2C2C;"></div>
+          <div class="color-info">
+            <div class="color-name">Charcoal</div>
+            <div class="color-hex">#2C2C2C</div>
+            <div class="color-use">Primary text, dark mode background.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: #5A5A5A;"></div>
+          <div class="color-info">
+            <div class="color-name">Slate</div>
+            <div class="color-hex">#5A5A5A</div>
+            <div class="color-use">Secondary text, descriptions.</div>
+          </div>
+        </div>
+        
+        <div class="color-card">
+          <div class="color-swatch" style="background: linear-gradient(135deg, #1B5E4A 0%, #E8A945 100%);"></div>
+          <div class="color-info">
+            <div class="color-name">Brand Gradient</div>
+            <div class="color-hex">Cedar → Gold</div>
+            <div class="color-use">Hero sections, premium features.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Typography -->
+    <section class="typography-section">
+      <h2 class="section-title">Typography</h2>
+      
+      <div class="type-showcase">
+        <div class="type-row">
+          <div class="type-label">Display / Headlines<br><small>Cairo Bold 800</small></div>
+          <div class="type-sample">
+            <span class="display-text">Find Your Expert</span>
+          </div>
+        </div>
+        
+        <div class="type-row">
+          <div class="type-label">Headings<br><small>Cairo Bold 700</small></div>
+          <div class="type-sample">
+            <span class="heading-text">Trusted Professionals Ready to Help</span>
+          </div>
+        </div>
+        
+        <div class="type-row">
+          <div class="type-label">Body Text<br><small>Outfit Regular 400</small></div>
+          <div class="type-sample">
+            <span class="body-text">Connect with skilled freelancers and tradespeople across Lebanon. From web developers to plumbers, find the right person for any job.</span>
+          </div>
+        </div>
+        
+        <div class="type-row">
+          <div class="type-label">Arabic Display<br><small>Cairo Bold 800</small></div>
+          <div class="type-sample arabic">
+            <span class="arabic-display">ابحث عن خبيرك</span>
+          </div>
+        </div>
+        
+        <div class="type-row">
+          <div class="type-label">Arabic Body<br><small>Cairo Regular 400</small></div>
+          <div class="type-sample arabic">
+            <span class="arabic-body">تواصل مع محترفين وحرفيين في كل لبنان. من المبرمجين للسباكين، لاقي الشخص المناسب لأي شغل.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Brand Values -->
+    <section class="values-section">
+      <h2 class="section-title">Brand Essence</h2>
+      
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E4A" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3>Community First</h3>
+          <p>Built by Lebanese, for Lebanese. We understand the local context, the challenges, and the incredible talent our community holds.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E4A" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Trust & Safety</h3>
+          <p>Verified identities, secure payments, and transparent reviews. Every transaction is protected so you can work with confidence.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E4A" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </div>
+          <h3>All Skills Welcome</h3>
+          <p>From coding to carpentry, design to plumbing. Every skill has value, every worker deserves opportunity.</p>
+        </div>
+      </div>
+    </section>
+    
+  </div>
+</body>
+</html>

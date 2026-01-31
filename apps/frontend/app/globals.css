@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== LABBINI BRAND BASE ===== */
+body {
+  background-color: #FDF8F3; /* cream */
+  color: #2C2C2C; /* charcoal */
+}

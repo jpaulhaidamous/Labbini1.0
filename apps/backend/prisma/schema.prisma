@@ -1,0 +1,464 @@
+// This is your Prisma schema file for Labbini
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========== ENUMS ==========
+
+enum UserRole {
+  CLIENT
+  FREELANCER
+  ADMIN
+}
+
+enum VerificationLevel {
+  LEVEL_0 // Email only
+  LEVEL_1 // Phone verified
+  LEVEL_2 // ID verified
+  LEVEL_3 // Premium verified
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum JobType {
+  FIXED
+  HOURLY
+  QUICK
+}
+
+enum BudgetType {
+  FIXED
+  RANGE
+  HOURLY
+}
+
+enum LocationType {
+  REMOTE
+  ONSITE
+  HYBRID
+}
+
+enum JobVisibility {
+  PUBLIC
+  PRIVATE
+  INVITE
+}
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ProposalStatus {
+  PENDING
+  SHORTLISTED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum ContractType {
+  FIXED
+  HOURLY
+}
+
+enum ContractStatus {
+  PENDING
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum MilestoneStatus {
+  PENDING
+  FUNDED
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  DISPUTED
+}
+
+enum TransactionType {
+  DEPOSIT
+  ESCROW_FUND
+  ESCROW_RELEASE
+  WITHDRAWAL
+  REFUND
+  FEE
+}
+
+enum PaymentMethod {
+  OMT
+  WHISH
+  BANK_TRANSFER
+  CARD
+  CASH
+  WALLET
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum MessageContentType {
+  TEXT
+  FILE
+  VOICE
+  SYSTEM
+}
+
+enum DocumentType {
+  NATIONAL_ID
+  PASSPORT
+  RESIDENCY
+  LICENSE
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ========== MODELS ==========
+
+model User {
+  id                String            @id @default(uuid())
+  email             String            @unique
+  phone             String?           @unique
+  passwordHash      String            @map("password_hash")
+  role              UserRole          @default(FREELANCER)
+  verificationLevel VerificationLevel @default(LEVEL_0) @map("verification_level")
+  status            UserStatus        @default(ACTIVE)
+  emailVerified     Boolean           @default(false) @map("email_verified")
+  phoneVerified     Boolean           @default(false) @map("phone_verified")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+
+  // Relations
+  profile                Profile?
+  jobsPosted             Job[]                   @relation("ClientJobs")
+  proposals              Proposal[]
+  contractsAsClient      Contract[]              @relation("ClientContracts")
+  contractsAsFreelancer  Contract[]              @relation("FreelancerContracts")
+  messagesSent           Message[]
+  reviewsGiven           Review[]                @relation("ReviewsGiven")
+  reviewsReceived        Review[]                @relation("ReviewsReceived")
+  wallet                 Wallet?
+  transactions           Transaction[]
+  verificationDocuments  VerificationDocument[]
+  refreshTokens          RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Profile {
+  id                 String   @id @default(uuid())
+  userId             String   @unique @map("user_id")
+  displayNameEn      String?  @map("display_name_en") @db.VarChar(100)
+  displayNameAr      String?  @map("display_name_ar") @db.VarChar(100)
+  bioEn              String?  @map("bio_en") @db.Text
+  bioAr              String?  @map("bio_ar") @db.Text
+  avatarUrl          String?  @map("avatar_url") @db.VarChar(500)
+  governorate        String?  @db.VarChar(50)
+  city               String?  @db.VarChar(100)
+  hourlyRate         Decimal? @map("hourly_rate") @db.Decimal(10, 2)
+  jobSuccessScore    Int      @default(0) @map("job_success_score")
+  totalEarned        Decimal  @default(0) @map("total_earned") @db.Decimal(15, 2)
+  totalJobsCompleted Int      @default(0) @map("total_jobs_completed")
+  isAvailable        Boolean  @default(true) @map("is_available")
+  profileVisibility  String   @default("public") @map("profile_visibility") @db.VarChar(20)
+  languages          String[] @default([])
+  responseTime       Int?     @map("response_time") // Average response time in hours
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills ProfileSkill[]
+
+  @@map("profiles")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  parentId  String?  @map("parent_id")
+  nameEn    String   @map("name_en") @db.VarChar(100)
+  nameAr    String   @map("name_ar") @db.VarChar(100)
+  slug      String   @unique @db.VarChar(100)
+  icon      String?  @db.VarChar(50)
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  skills   Skill[]
+  jobs     Job[]
+
+  @@map("categories")
+}
+
+model Skill {
+  id         String   @id @default(uuid())
+  categoryId String   @map("category_id")
+  nameEn     String   @map("name_en") @db.VarChar(100)
+  nameAr     String   @map("name_ar") @db.VarChar(100)
+  slug       String   @unique @db.VarChar(100)
+
+  category Category       @relation(fields: [categoryId], references: [id])
+  profiles ProfileSkill[]
+
+  @@map("skills")
+}
+
+model ProfileSkill {
+  profileId String @map("profile_id")
+  skillId   String @map("skill_id")
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, skillId])
+  @@map("user_skills")
+}
+
+model Job {
+  id             String         @id @default(uuid())
+  clientId       String         @map("client_id")
+  titleEn        String         @map("title_en") @db.VarChar(200)
+  titleAr        String?        @map("title_ar") @db.VarChar(200)
+  descriptionEn  String         @map("description_en") @db.Text
+  descriptionAr  String?        @map("description_ar") @db.Text
+  categoryId     String         @map("category_id")
+  jobType        JobType        @map("job_type")
+  budgetType     BudgetType     @map("budget_type")
+  budgetMin      Decimal?       @map("budget_min") @db.Decimal(10, 2)
+  budgetMax      Decimal?       @map("budget_max") @db.Decimal(10, 2)
+  locationType   LocationType   @default(REMOTE) @map("location_type")
+  governorate    String?        @db.VarChar(50)
+  city           String?        @db.VarChar(100)
+  addressEncrypted String?      @map("address_encrypted") @db.Text
+  latitude       Decimal?       @db.Decimal(10, 8)
+  longitude      Decimal?       @db.Decimal(11, 8)
+  startDate      DateTime?      @map("start_date")
+  endDate        DateTime?      @map("end_date")
+  isUrgent       Boolean        @default(false) @map("is_urgent")
+  visibility     JobVisibility  @default(PUBLIC)
+  status         JobStatus      @default(DRAFT)
+  proposalsCount Int            @default(0) @map("proposals_count")
+  viewsCount     Int            @default(0) @map("views_count")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  client    User       @relation("ClientJobs", fields: [clientId], references: [id])
+  category  Category   @relation(fields: [categoryId], references: [id])
+  proposals Proposal[]
+  contracts Contract[]
+
+  @@map("jobs")
+}
+
+model Proposal {
+  id               String         @id @default(uuid())
+  jobId            String         @map("job_id")
+  freelancerId     String         @map("freelancer_id")
+  coverLetter      String         @map("cover_letter") @db.Text
+  proposedRate     Decimal        @map("proposed_rate") @db.Decimal(10, 2)
+  proposedDuration Int?           @map("proposed_duration")
+  durationUnit     String?        @map("duration_unit") @db.VarChar(20)
+  status           ProposalStatus @default(PENDING)
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  job        Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  freelancer User       @relation(fields: [freelancerId], references: [id])
+  contract   Contract?
+
+  @@unique([jobId, freelancerId])
+  @@map("proposals")
+}
+
+model Contract {
+  id           String         @id @default(uuid())
+  jobId        String         @map("job_id")
+  proposalId   String?        @unique @map("proposal_id")
+  clientId     String         @map("client_id")
+  freelancerId String         @map("freelancer_id")
+  contractType ContractType   @map("contract_type")
+  status       ContractStatus @default(PENDING)
+  totalAmount  Decimal?       @map("total_amount") @db.Decimal(10, 2)
+  hourlyRate   Decimal?       @map("hourly_rate") @db.Decimal(10, 2)
+  weeklyLimit  Int?           @map("weekly_limit")
+  startDate    DateTime?      @map("start_date")
+  endDate      DateTime?      @map("end_date")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  completedAt  DateTime?      @map("completed_at")
+
+  job          Job           @relation(fields: [jobId], references: [id])
+  proposal     Proposal?     @relation(fields: [proposalId], references: [id])
+  client       User          @relation("ClientContracts", fields: [clientId], references: [id])
+  freelancer   User          @relation("FreelancerContracts", fields: [freelancerId], references: [id])
+  milestones   Milestone[]
+  reviews      Review[]
+  transactions Transaction[]
+
+  @@map("contracts")
+}
+
+model Milestone {
+  id          String          @id @default(uuid())
+  contractId  String          @map("contract_id")
+  name        String          @db.VarChar(200)
+  description String?         @db.Text
+  amount      Decimal         @db.Decimal(10, 2)
+  dueDate     DateTime?       @map("due_date")
+  status      MilestoneStatus @default(PENDING)
+  fundedAt    DateTime?       @map("funded_at")
+  submittedAt DateTime?       @map("submitted_at")
+  approvedAt  DateTime?       @map("approved_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@map("milestones")
+}
+
+model Transaction {
+  id                String            @id @default(uuid())
+  userId            String            @map("user_id")
+  contractId        String?           @map("contract_id")
+  type              TransactionType
+  amount            Decimal           @db.Decimal(10, 2)
+  currency          String            @default("USD") @db.VarChar(3)
+  paymentMethod     PaymentMethod     @map("payment_method")
+  status            TransactionStatus @default(PENDING)
+  externalReference String?           @map("external_reference") @db.VarChar(100)
+  description       String?           @db.Text
+  metadata          Json?
+  createdAt         DateTime          @default(now()) @map("created_at")
+  completedAt       DateTime?         @map("completed_at")
+
+  user     User      @relation(fields: [userId], references: [id])
+  contract Contract? @relation(fields: [contractId], references: [id])
+
+  @@index([userId])
+  @@index([contractId])
+  @@map("transactions")
+}
+
+model Wallet {
+  id               String   @id @default(uuid())
+  userId           String   @unique @map("user_id")
+  availableBalance Decimal  @default(0) @map("available_balance") @db.Decimal(15, 2)
+  pendingBalance   Decimal  @default(0) @map("pending_balance") @db.Decimal(15, 2)
+  totalEarned      Decimal  @default(0) @map("total_earned") @db.Decimal(15, 2)
+  totalWithdrawn   Decimal  @default(0) @map("total_withdrawn") @db.Decimal(15, 2)
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wallets")
+}
+
+model MessageThread {
+  id             String    @id @default(uuid())
+  jobId          String?   @map("job_id")
+  contractId     String?   @map("contract_id")
+  participantIds String[]  @map("participant_ids")
+  lastMessageAt  DateTime? @map("last_message_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  messages Message[]
+
+  @@map("message_threads")
+}
+
+model Message {
+  id          String             @id @default(uuid())
+  threadId    String             @map("thread_id")
+  senderId    String             @map("sender_id")
+  content     String             @db.Text
+  contentType MessageContentType @default(TEXT) @map("content_type")
+  attachments Json?
+  isRead      Boolean            @default(false) @map("is_read")
+  createdAt   DateTime           @default(now()) @map("created_at")
+
+  thread MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender User          @relation(fields: [senderId], references: [id])
+
+  @@index([threadId])
+  @@index([senderId])
+  @@map("messages")
+}
+
+model Review {
+  id                    String   @id @default(uuid())
+  contractId            String   @map("contract_id")
+  reviewerId            String   @map("reviewer_id")
+  revieweeId            String   @map("reviewee_id")
+  overallRating         Int      @map("overall_rating")
+  qualityRating         Int?     @map("quality_rating")
+  communicationRating   Int?     @map("communication_rating")
+  timelinessRating      Int?     @map("timeliness_rating")
+  professionalismRating Int?     @map("professionalism_rating")
+  wouldRecommend        Boolean? @map("would_recommend")
+  publicReview          String?  @map("public_review") @db.Text
+  privateFeedback       String?  @map("private_feedback") @db.Text
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  contract Contract @relation(fields: [contractId], references: [id])
+  reviewer User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewee User     @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+
+  @@unique([contractId, reviewerId])
+  @@map("reviews")
+}
+
+model VerificationDocument {
+  id              String         @id @default(uuid())
+  userId          String         @map("user_id")
+  documentType    DocumentType   @map("document_type")
+  frontImageUrl   String?        @map("front_image_url") @db.VarChar(500)
+  backImageUrl    String?        @map("back_image_url") @db.VarChar(500)
+  selfieImageUrl  String?        @map("selfie_image_url") @db.VarChar(500)
+  status          DocumentStatus @default(PENDING)
+  rejectionReason String?        @map("rejection_reason") @db.Text
+  reviewedBy      String?        @map("reviewed_by")
+  reviewedAt      DateTime?      @map("reviewed_at")
+  createdAt       DateTime       @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("verification_documents")
+}

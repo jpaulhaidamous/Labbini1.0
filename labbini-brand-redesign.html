@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labbini - Brand Identity 2.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary Palette */
+      --cedar-green: #1B5E4A;
+      --cedar-light: #2D7A62;
+      --cedar-dark: #14483A;
+      --sunset-gold: #E8A945;
+      --sunset-warm: #F4C06F;
+      --sunset-light: #FFF4E0;
+
+      /* Neutrals */
+      --cream: #FDF8F3;
+      --sand: #F5EDE3;
+      --charcoal: #2C2C2C;
+      --slate: #5A5A5A;
+      --white: #FFFFFF;
+
+      /* Accents */
+      --terracotta: #C75D3A;
+      --sea-blue: #3D7A8C;
+      --success: #10B981;
+      --warning: #F59E0B;
+
+      /* Shadows */
+      --shadow-sm: 0 2px 8px rgba(27, 94, 74, 0.06);
+      --shadow-md: 0 4px 24px rgba(27, 94, 74, 0.12);
+      --shadow-lg: 0 8px 40px rgba(27, 94, 74, 0.18);
+      --shadow-xl: 0 20px 60px rgba(27, 94, 74, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(253, 248, 243, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 20px 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--cedar-green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--slate);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--cedar-green);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--sunset-light) 100%);
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(232, 169, 69, 0.15) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(27, 94, 74, 0.1) 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      border-radius: 50%;
+    }
+
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cedar-green);
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 8px 16px;
+      background: rgba(27, 94, 74, 0.1);
+      border-radius: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -2px;
+    }
+
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--cedar-green) 0%, var(--sunset-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: var(--slate);
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .hero-arabic {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--sunset-gold);
+      margin-bottom: 40px;
+      direction: rtl;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .stat {
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--cedar-green);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--slate);
+      font-weight: 500;
+    }
+
+    /* Logo Showcase */
+    .logo-showcase {
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+      background: white;
+      border-radius: 40px;
+      padding: 60px;
+      box-shadow: var(--shadow-xl);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .logo-showcase::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, var(--cedar-green), var(--sunset-gold));
+      border-radius: 40px;
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .logo-main {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .logo-wordmark-hero {
+      text-align: center;
+    }
+
+    .logo-wordmark-hero h2 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--cedar-green);
+      letter-spacing: -2px;
+      margin-bottom: 10px;
+    }
+
+    .logo-wordmark-hero .tagline {
+      font-size: 1.1rem;
+      color: var(--slate);
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    /* Section */
+    .section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 120px 40px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sunset-gold);
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--charcoal);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .section-description {
+      font-size: 1.2rem;
+      color: var(--slate);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* Logo Variations Grid */
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .logo-card {
+      border-radius: 24px;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .logo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .logo-card.light {
+      background: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .logo-card.dark {
+      background: var(--charcoal);
+    }
+
+    .logo-card.gradient {
+      background: linear-gradient(135deg, var(--cedar-green) 0%, var(--cedar-light) 100%);
+    }
+
+    .logo-card-label {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-card.light .logo-card-label {
+      background: var(--sand);
+      color: var(--cedar-green);
+    }
+
+    .logo-card.dark .logo-card-label,
+    .logo-card.gradient .logo-card-label {
+      color: white;
+    }
+
+    /* Color Palette */
+    .color-section {
+      background: white;
+      padding: 120px 0;
+    }
+
+    .color-categories {
+      display: grid;
+      gap: 60px;
+    }
+
+    .color-category h3 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cedar-green);
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--sand);
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .color-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .color-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .color-swatch {
+      height: 140px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .color-hex-overlay {
+      font-family: 'Inter', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 16px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .color-card:hover .color-hex-overlay {
+      opacity: 1;
+    }
+
+    .color-info {
+      padding: 24px;
+    }
+
+    .color-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--charcoal);
+    }
+
+    .color-hex {
+      font-family: 'Inter', monospace;
+      font-size: 0.9rem;
+      color: var(--slate);
+      margin-bottom: 12px;
+    }
+
+    .color-use {
+      font-size: 0.85rem;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    /* Typography Section */
+    .type-section {
+      background: var(--cream);
+    }
+
+    .type-showcase {
+      display: grid;
+      gap: 40px;
+    }
+
+    .type-example {
+      background: white;
+      border-radius: 24px;
+      padding: 50px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s;
+    }
+
+    .type-example:hover {
+      transform: translateX(10px);
+    }
+
+    .type-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--sand);
+    }
+
+    .type-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cedar-green);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .type-spec {
+      font-size: 0.85rem;
+      color: var(--slate);
+      font-family: monospace;
+    }
+
+    .type-display {
+      font-family: 'Cairo', sans-serif;
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .type-heading {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--charcoal);
+      line-height: 1.2;
+      margin-bottom: 15px;
+    }
+
+    .type-subheading {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cedar-green);
+      margin-bottom: 15px;
+    }
+
+    .type-body {
+      font-size: 1.1rem;
+      color: var(--slate);
+      line-height: 1.8;
+    }
+
+    .type-body-small {
+      font-size: 0.95rem;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+
+    .type-arabic {
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Brand Values */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .value-card {
+      background: white;
+      border-radius: 24px;
+      padding: 50px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .value-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--cedar-green), var(--sunset-gold));
+    }
+
+    .value-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .value-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--cedar-green), var(--cedar-light));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .value-card h3 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--charcoal);
+      margin-bottom: 15px;
+    }
+
+    .value-card p {
+      font-size: 1rem;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+
+    /* Usage Guidelines */
+    .guidelines-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+
+    .guideline-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .guideline-card.do {
+      border-left: 4px solid var(--success);
+    }
+
+    .guideline-card.dont {
+      border-left: 4px solid var(--terracotta);
+    }
+
+    .guideline-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .guideline-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+    }
+
+    .guideline-card.do .guideline-badge {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .guideline-card.dont .guideline-badge {
+      background: rgba(199, 93, 58, 0.1);
+      color: var(--terracotta);
+    }
+
+    .guideline-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .guideline-list li {
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.95rem;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+
+    .guideline-list li::before {
+      content: '•';
+      position: absolute;
+      left: 10px;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .guideline-card.do .guideline-list li::before {
+      color: var(--success);
+    }
+
+    .guideline-card.dont .guideline-list li::before {
+      color: var(--terracotta);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--charcoal);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer p {
+      font-size: 0.95rem;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .logo-showcase {
+        padding: 40px;
+      }
+
+      .hero-title {
+        font-size: 4rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .logo-grid,
+      .guidelines-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 80px 20px;
+      }
+
+      .logo-showcase {
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="38" fill="#1B5E4A"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#FDF8F3" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#FDF8F3"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+        </svg>
+        Labbini
+      </a>
+      <ul class="nav-links">
+        <li><a href="#logo">Logo</a></li>
+        <li><a href="#colors">Colors</a></li>
+        <li><a href="#typography">Typography</a></li>
+        <li><a href="#values">Values</a></li>
+        <li><a href="#guidelines">Guidelines</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-label">Brand Identity 2.0</span>
+        <h1 class="hero-title">
+          <span class="gradient-text">Labbini</span><br>
+          Design System
+        </h1>
+        <p class="hero-subtitle">Lebanon's Freelance & Services Marketplace</p>
+        <p class="hero-arabic">لبّيني - أجب النداء</p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number">70+</div>
+            <div class="stat-label">API Endpoints</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Type Safe</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">7</div>
+            <div class="stat-label">Core Modules</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo-showcase">
+        <svg class="logo-main" viewBox="0 0 200 200" fill="none">
+          <defs>
+            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#1B5E4A"/>
+              <stop offset="100%" style="stop-color:#2D7A62"/>
+            </linearGradient>
+            <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#E8A945"/>
+              <stop offset="100%" style="stop-color:#F4C06F"/>
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" r="95" fill="url(#logoGrad)"/>
+          <path d="M60 130 L60 75 C60 65 68 58 78 58 L95 58"
+                stroke="#FDF8F3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M140 70 L140 125 C140 135 132 142 122 142 L105 142"
+                stroke="url(#accentGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="105" cy="58" r="10" fill="#FDF8F3"/>
+          <circle cx="95" cy="142" r="10" fill="url(#accentGrad)"/>
+          <path d="M100 75 L100 125" stroke="#FDF8F3" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+
+        <div class="logo-wordmark-hero">
+          <h2>Labbini</h2>
+          <p class="tagline">ANSWER THE CALL</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Variations -->
+  <section id="logo" class="section">
+    <div class="section-header">
+      <div class="section-label">Logo System</div>
+      <h2 class="section-title">Logo Variations</h2>
+      <p class="section-description">
+        The Labbini logo represents connection and collaboration. Two hands reaching, forming the letter "L" - symbolizing how skills meet needs.
+      </p>
+    </div>
+
+    <div class="logo-grid">
+      <div class="logo-card light">
+        <span class="logo-card-label">Primary Light</span>
+        <svg width="140" height="60" viewBox="0 0 220 80">
+          <circle cx="40" cy="40" r="35" fill="#1B5E4A"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#FDF8F3" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#FDF8F3"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+          <text x="90" y="50" font-family="Cairo" font-weight="800" font-size="36" fill="#1B5E4A">Labbini</text>
+        </svg>
+      </div>
+
+      <div class="logo-card dark">
+        <span class="logo-card-label">Inverted Dark</span>
+        <svg width="140" height="60" viewBox="0 0 220 80">
+          <circle cx="40" cy="40" r="35" fill="#FDF8F3"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#1B5E4A" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#1B5E4A"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+          <text x="90" y="50" font-family="Cairo" font-weight="800" font-size="36" fill="#FDF8F3">Labbini</text>
+        </svg>
+      </div>
+
+      <div class="logo-card gradient">
+        <span class="logo-card-label">Brand Gradient</span>
+        <svg width="140" height="60" viewBox="0 0 220 80">
+          <circle cx="40" cy="40" r="35" fill="#FDF8F3"/>
+          <path d="M25 52 L25 30 C25 26 28 23 32 23 L42 23" stroke="#1B5E4A" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M55 28 L55 50 C55 54 52 57 48 57 L38 57" stroke="#E8A945" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="45" cy="23" r="4" fill="#1B5E4A"/>
+          <circle cx="35" cy="57" r="4" fill="#E8A945"/>
+          <text x="90" y="50" font-family="Cairo" font-weight="800" font-size="36" fill="white">Labbini</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Colors -->
+  <section id="colors" class="color-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-label">Color System</div>
+        <h2 class="section-title">Brand Palette</h2>
+        <p class="section-description">
+          Warm, trustworthy colors inspired by Lebanese landscapes - from the cedar mountains to Mediterranean sunsets.
+        </p>
+      </div>
+
+      <div class="color-categories">
+        <!-- Primary Colors -->
+        <div class="color-category">
+          <h3>Primary Colors</h3>
+          <div class="color-grid">
+            <div class="color-card">
+              <div class="color-swatch" style="background: #1B5E4A;">
+                <div class="color-hex-overlay">#1B5E4A</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Cedar Green</div>
+                <div class="color-hex">#1B5E4A</div>
+                <div class="color-use">Primary brand color. Headers, CTAs, trust elements.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #2D7A62;">
+                <div class="color-hex-overlay">#2D7A62</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Cedar Light</div>
+                <div class="color-hex">#2D7A62</div>
+                <div class="color-use">Hover states, secondary actions.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #E8A945;">
+                <div class="color-hex-overlay">#E8A945</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Sunset Gold</div>
+                <div class="color-hex">#E8A945</div>
+                <div class="color-use">Accent color. Highlights, achievements, CTAs.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #F4C06F;">
+                <div class="color-hex-overlay">#F4C06F</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Sunset Warm</div>
+                <div class="color-hex">#F4C06F</div>
+                <div class="color-use">Lighter accent, backgrounds, warmth.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accent Colors -->
+        <div class="color-category">
+          <h3>Accent Colors</h3>
+          <div class="color-grid">
+            <div class="color-card">
+              <div class="color-swatch" style="background: #C75D3A;">
+                <div class="color-hex-overlay">#C75D3A</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Terracotta</div>
+                <div class="color-hex">#C75D3A</div>
+                <div class="color-use">Alerts, manual trades category, urgent.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #3D7A8C;">
+                <div class="color-hex-overlay">#3D7A8C</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Sea Blue</div>
+                <div class="color-hex">#3D7A8C</div>
+                <div class="color-use">Tech category, links, info states.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #8B6F4E;">
+                <div class="color-hex-overlay">#8B6F4E</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Earth Brown</div>
+                <div class="color-hex">#8B6F4E</div>
+                <div class="color-use">Professional services, craftsmanship.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Neutrals -->
+        <div class="color-category">
+          <h3>Neutrals</h3>
+          <div class="color-grid">
+            <div class="color-card">
+              <div class="color-swatch" style="background: #FDF8F3;">
+                <div class="color-hex-overlay" style="color: #2C2C2C; background: rgba(255,255,255,0.8);">#FDF8F3</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Cream</div>
+                <div class="color-hex">#FDF8F3</div>
+                <div class="color-use">Primary background, warmth.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #F5EDE3;">
+                <div class="color-hex-overlay" style="color: #2C2C2C; background: rgba(255,255,255,0.8);">#F5EDE3</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Sand</div>
+                <div class="color-hex">#F5EDE3</div>
+                <div class="color-use">Cards, dividers, subtle backgrounds.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #2C2C2C;">
+                <div class="color-hex-overlay">#2C2C2C</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Charcoal</div>
+                <div class="color-hex">#2C2C2C</div>
+                <div class="color-use">Primary text, dark backgrounds.</div>
+              </div>
+            </div>
+
+            <div class="color-card">
+              <div class="color-swatch" style="background: #5A5A5A;">
+                <div class="color-hex-overlay">#5A5A5A</div>
+              </div>
+              <div class="color-info">
+                <div class="color-name">Slate</div>
+                <div class="color-hex">#5A5A5A</div>
+                <div class="color-use">Secondary text, descriptions.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography -->
+  <section id="typography" class="type-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-label">Typography</div>
+        <h2 class="section-title">Type System</h2>
+        <p class="section-description">
+          Cairo for Arabic & headings. Inter for Latin body text. Both optimized for screen readability.
+        </p>
+      </div>
+
+      <div class="type-showcase">
+        <div class="type-example">
+          <div class="type-meta">
+            <span class="type-label">Display</span>
+            <span class="type-spec">Cairo / 900 / 64px</span>
+          </div>
+          <div class="type-display">Find Your Expert Today</div>
+        </div>
+
+        <div class="type-example">
+          <div class="type-meta">
+            <span class="type-label">Heading</span>
+            <span class="type-spec">Cairo / 800 / 40px</span>
+          </div>
+          <div class="type-heading">Trusted Professionals Across Lebanon</div>
+        </div>
+
+        <div class="type-example">
+          <div class="type-meta">
+            <span class="type-label">Subheading</span>
+            <span class="type-spec">Inter / 700 / 24px</span>
+          </div>
+          <div class="type-subheading">Connect with skilled freelancers instantly</div>
+        </div>
+
+        <div class="type-example">
+          <div class="type-meta">
+            <span class="type-label">Body</span>
+            <span class="type-spec">Inter / 400 / 18px</span>
+          </div>
+          <div class="type-body">
+            From web developers to plumbers, graphic designers to electricians - Labbini connects you with verified professionals ready to bring your projects to life. Post a job, receive proposals, and hire with confidence.
+          </div>
+        </div>
+
+        <div class="type-example type-arabic">
+          <div class="type-meta">
+            <span class="type-label">Arabic Display</span>
+            <span class="type-spec">Cairo / 900 / 48px</span>
+          </div>
+          <div class="type-display">ابحث عن خبيرك اليوم</div>
+        </div>
+
+        <div class="type-example type-arabic">
+          <div class="type-meta">
+            <span class="type-label">Arabic Body</span>
+            <span class="type-spec">Cairo / 400 / 20px</span>
+          </div>
+          <div class="type-body">
+            من المبرمجين للسباكين، من المصممين للكهربائيين - لبّيني يربطك بمحترفين معتمدين جاهزين لتحقيق مشاريعك. انشر شغل، استقبل عروض، ووظف بثقة تامة.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Values -->
+  <section id="values" class="section">
+    <div class="section-header">
+      <div class="section-label">Brand Essence</div>
+      <h2 class="section-title">Our Values</h2>
+      <p class="section-description">
+        What makes Labbini different - our commitment to the Lebanese community.
+      </p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Community First</h3>
+        <p>Built by Lebanese, for Lebanese. We understand the local context, challenges, and incredible talent our community holds.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3>Trust & Safety</h3>
+        <p>Verified identities, secure escrow payments, and transparent reviews. Every transaction is protected.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <h3>All Skills Welcome</h3>
+        <p>From coding to carpentry, design to plumbing. Every skill has value, every worker deserves opportunity.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guidelines -->
+  <section id="guidelines" class="section" style="background: white;">
+    <div class="section-header">
+      <div class="section-label">Usage Guidelines</div>
+      <h2 class="section-title">Brand Do's & Don'ts</h2>
+      <p class="section-description">
+        Keep the brand consistent across all touchpoints.
+      </p>
+    </div>
+
+    <div class="guidelines-grid">
+      <div class="guideline-card do">
+        <div class="guideline-header">
+          <span class="guideline-badge">Do</span>
+          <h3 style="font-family: Cairo; font-weight: 700; color: var(--charcoal);">Always</h3>
+        </div>
+        <ul class="guideline-list">
+          <li>Use the official logo files provided</li>
+          <li>Maintain clear space around the logo</li>
+          <li>Use brand colors from the palette</li>
+          <li>Keep Arabic text right-aligned (RTL)</li>
+          <li>Use Cairo font for Arabic content</li>
+          <li>Ensure sufficient color contrast</li>
+        </ul>
+      </div>
+
+      <div class="guideline-card dont">
+        <div class="guideline-header">
+          <span class="guideline-badge">Don't</span>
+          <h3 style="font-family: Cairo; font-weight: 700; color: var(--charcoal);">Never</h3>
+        </div>
+        <ul class="guideline-list">
+          <li>Stretch or distort the logo</li>
+          <li>Change the logo colors</li>
+          <li>Add effects or shadows to the logo</li>
+          <li>Use non-brand colors in primary UI</li>
+          <li>Use English fonts for Arabic text</li>
+          <li>Place logo on busy backgrounds</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">Labbini</div>
+      <p>© 2026 Labbini. Built for Lebanon's freelance community.</p>
+      <p>Brand Identity Version 2.0 - Last Updated January 2026</p>
+    </div>
+  </footer>
+</body>
+</html>

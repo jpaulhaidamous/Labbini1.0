@@ -1,0 +1,34 @@
+{
+  "name": "labbini",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lebanon's Freelance & Services Marketplace",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c cyan,magenta \"pnpm -C apps/backend dev\" \"pnpm -C apps/frontend dev\"",
+    "dev:backend": "pnpm -C apps/backend dev",
+    "dev:frontend": "pnpm -C apps/frontend dev",
+    "build": "pnpm -C packages/shared-types build && pnpm -C apps/backend build && pnpm -C apps/frontend build",
+    "build:backend": "pnpm -C apps/backend build",
+    "build:frontend": "pnpm -C apps/frontend build",
+    "db:migrate": "pnpm -C apps/backend db:migrate",
+    "db:seed": "pnpm -C apps/backend db:seed",
+    "db:studio": "pnpm -C apps/backend db:studio",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker-compose -f docker/docker-compose.yml logs -f",
+    "test": "pnpm -C apps/backend test && pnpm -C apps/frontend test",
+    "test:backend": "pnpm -C apps/backend test",
+    "test:frontend": "pnpm -C apps/frontend test",
+    "lint": "pnpm -C apps/backend lint && pnpm -C apps/frontend lint"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
