@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useProfilesStore } from '@/lib/stores/profiles.store';
-import { useAuthStore } from '@/lib/stores/auth.store';
+import { useAuthGuard } from '@/lib/hooks/useAuthGuard';
 import ProfileCard from '@/components/profile/ProfileCard';
 
 interface ProfileViewProps {
@@ -13,17 +12,13 @@ interface ProfileViewProps {
 
 export default function ProfileView({ locale }: ProfileViewProps) {
   const t = useTranslations('profile');
-  const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, isReady } = useAuthGuard(locale);
   const { myProfile, isLoading, error, fetchMyProfile } = useProfilesStore();
 
   useEffect(() => {
-    if (!user) {
-      router.push(`/${locale}/login`);
-      return;
-    }
+    if (!isReady) return;
     fetchMyProfile();
-  }, [user, locale, router, fetchMyProfile]);
+  }, [isReady, fetchMyProfile]);
 
   if (isLoading) {
     return (

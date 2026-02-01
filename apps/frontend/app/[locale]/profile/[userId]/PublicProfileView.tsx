@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useProfilesStore } from '@/lib/stores/profiles.store';
+import { reviewsApi, Review } from '@/lib/api/reviews';
 import ProfileCard from '@/components/profile/ProfileCard';
+import ReviewsList from '@/components/reviews/ReviewsList';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -14,10 +16,13 @@ interface PublicProfileViewProps {
 
 export default function PublicProfileView({ locale, userId }: PublicProfileViewProps) {
   const t = useTranslations('profile');
+  const tReviews = useTranslations('reviews');
   const { publicProfile, isLoading, error, fetchProfile, clearPublicProfile } = useProfilesStore();
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     fetchProfile(userId);
+    reviewsApi.getUserReviews(userId).then((data) => setReviews(data.reviews)).catch(() => {});
     return () => {
       clearPublicProfile();
     };
@@ -61,12 +66,10 @@ export default function PublicProfileView({ locale, userId }: PublicProfileViewP
     <div className="space-y-6">
       <ProfileCard profile={publicProfile} locale={locale} isOwnProfile={false} />
 
-      {/* Reviews Section - Placeholder for Phase 8 */}
+      {/* Reviews Section */}
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">{t('reviews')}</h2>
-        <div className="bg-gray-50 border border-gray-200 rounded p-8 text-center text-gray-500">
-          {t('noReviewsYet')}
-        </div>
+        <h2 className="text-2xl font-bold mb-4 text-[#2C2C2C]" style={{ fontFamily: 'Cairo, sans-serif' }}>{tReviews('reviews')}</h2>
+        <ReviewsList reviews={reviews} locale={locale} />
       </div>
     </div>
   );

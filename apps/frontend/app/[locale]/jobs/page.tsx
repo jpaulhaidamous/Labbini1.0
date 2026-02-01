@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Header } from '@/components/layout/Header';
 import {
   Card,
@@ -47,10 +48,13 @@ function safeLower(s: unknown) {
 }
 
 export default function JobsPage() {
+  const t = useTranslations('jobs');
+  const tCommon = useTranslations('common');
   const params = useParams();
   const locale = params?.locale as string || 'en';
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -61,6 +65,7 @@ export default function JobsPage() {
   const loadJobs = async () => {
     try {
       setLoading(true);
+      setError(null);
 
       // Support both: api.get() returns data directly OR wraps inside { data: ... }
       const res: any = await api.get('/jobs');
@@ -68,8 +73,8 @@ export default function JobsPage() {
 
       const list = Array.isArray(payload?.jobs) ? payload.jobs : [];
       setJobs(list);
-    } catch (error) {
-      console.error('Failed to load jobs:', error);
+    } catch (err: any) {
+      setError(err?.response?.data?.message || tCommon('error'));
       setJobs([]);
     } finally {
       setLoading(false);
@@ -101,11 +106,10 @@ export default function JobsPage() {
             className="text-5xl font-bold text-[#2C2C2C] mb-4"
             style={{ fontFamily: 'Cairo, sans-serif' }}
           >
-            Browse Jobs
+            {t('pageTitle')}
           </h1>
           <p className="text-xl text-[#5A5A5A] max-w-2xl mx-auto">
-            Find your next opportunity among hundreds of projects posted by
-            clients across Lebanon
+            {t('pageDescription')}
           </p>
         </div>
 
@@ -113,7 +117,7 @@ export default function JobsPage() {
         <div className="max-w-2xl mx-auto mb-12">
           <Input
             type="text"
-            placeholder="Search jobs by title, description, or category..."
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchQuery(e.target.value)
@@ -122,11 +126,18 @@ export default function JobsPage() {
           />
         </div>
 
+        {/* Error State */}
+        {error && !loading && (
+          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded text-center">
+            {error}
+          </div>
+        )}
+
         {/* Loading State */}
         {loading && (
           <div className="text-center py-20">
             <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-[#1B5E4A] border-r-transparent" />
-            <p className="mt-4 text-[#5A5A5A]">Loading jobs...</p>
+            <p className="mt-4 text-[#5A5A5A]">{t('loadingJobs')}</p>
           </div>
         )}
 
@@ -137,14 +148,10 @@ export default function JobsPage() {
               <Card className="text-center py-20 bg-white shadow-md">
                 <CardHeader>
                   <CardTitle className="text-2xl text-[#5A5A5A]">
-                    {searchQuery
-                      ? 'No jobs found matching your search'
-                      : 'No jobs available'}
+                    {searchQuery ? t('noJobsFound') : t('noJobsAvailable')}
                   </CardTitle>
                   <CardDescription>
-                    {searchQuery
-                      ? 'Try adjusting your search terms'
-                      : 'Check back soon for new opportunities'}
+                    {searchQuery ? t('tryAdjusting') : t('checkBackSoon')}
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -164,11 +171,11 @@ export default function JobsPage() {
 
                 const locationLabel =
                   job.locationType === 'REMOTE'
-                    ? 'Remote'
+                    ? t('remote')
                     : job.locationType === 'ONSITE'
-                      ? 'On-site'
+                      ? t('onsite')
                       : job.locationType === 'HYBRID'
-                        ? 'Hybrid'
+                        ? t('hybrid')
                         : '—';
 
                 const isFixed =
@@ -180,9 +187,9 @@ export default function JobsPage() {
 
                 const jobTypeLabel =
                   job.jobType === 'FIXED'
-                    ? 'Fixed Price'
+                    ? t('fixedPrice')
                     : job.jobType === 'HOURLY'
-                      ? 'Hourly Rate'
+                      ? t('hourly')
                       : '—';
 
                 const desc = job.descriptionEn ?? '';
@@ -199,7 +206,7 @@ export default function JobsPage() {
                             {title}
                           </CardTitle>
                           <CardDescription className="text-base">
-                            Posted by{' '}
+                            {tCommon('postedBy')}{' '}
                             <span className="font-semibold text-[#2C2C2C]">
                               {poster}
                             </span>
@@ -236,7 +243,7 @@ export default function JobsPage() {
 
                     <CardContent>
                       <p className="text-[#5A5A5A] mb-4 line-clamp-3">
-                        {desc || 'No description provided.'}
+                        {desc || t('noDescription')}
                       </p>
 
                       <div className="flex items-center justify-between gap-4">
@@ -248,7 +255,7 @@ export default function JobsPage() {
 
                         <Link href={`/${locale}/jobs/${job.id}`}>
                           <Button className="bg-[#1B5E4A] hover:bg-[#2D7A62] text-white">
-                            View Details
+                            {tCommon('viewDetails')}
                           </Button>
                         </Link>
                       </div>
@@ -264,13 +271,13 @@ export default function JobsPage() {
         {!loading && jobs.length > 0 && (
           <div className="mt-12 text-center text-[#5A5A5A]">
             <p className="text-lg">
-              Showing{' '}
+              {tCommon('showing')}{' '}
               <span className="font-bold text-[#1B5E4A]">
                 {filteredJobs.length}
               </span>{' '}
-              of{' '}
+              {tCommon('of')}{' '}
               <span className="font-bold text-[#1B5E4A]">{jobs.length}</span>{' '}
-              jobs
+              {tCommon('jobs')}
             </p>
           </div>
         )}

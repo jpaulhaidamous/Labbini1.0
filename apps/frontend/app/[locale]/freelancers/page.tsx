@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import Link from 'next/link';
 import { api } from '@/lib/api/client';
 
 interface Freelancer {
@@ -31,8 +34,13 @@ interface Freelancer {
 }
 
 export default function FreelancersPage() {
+  const t = useTranslations('freelancers');
+  const tCommon = useTranslations('common');
+  const params = useParams();
+  const locale = params.locale as string;
   const [freelancers, setFreelancers] = useState<Freelancer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -42,10 +50,11 @@ export default function FreelancersPage() {
   const loadFreelancers = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await api.get('/profiles/search');
       setFreelancers(response.profiles || []);
-    } catch (error) {
-      console.error('Failed to load freelancers:', error);
+    } catch (err: any) {
+      setError(err?.response?.data?.message || tCommon('error'));
     } finally {
       setLoading(false);
     }
@@ -65,10 +74,10 @@ export default function FreelancersPage() {
         {/* Page Header */}
         <div className="mb-12 text-center">
           <h1 className="text-5xl font-bold text-[#2C2C2C] mb-4" style={{ fontFamily: 'Cairo, sans-serif' }}>
-            Find Freelancers
+            {t('title')}
           </h1>
           <p className="text-xl text-[#5A5A5A] max-w-2xl mx-auto">
-            Connect with skilled professionals and tradespeople across Lebanon
+            {t('subtitle')}
           </p>
         </div>
 
@@ -76,18 +85,25 @@ export default function FreelancersPage() {
         <div className="max-w-2xl mx-auto mb-12">
           <Input
             type="text"
-            placeholder="Search by name, skills, or location..."
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="h-14 text-lg border-[#F5EDE3] focus:border-[#1B5E4A]"
           />
         </div>
 
+        {/* Error State */}
+        {error && !loading && (
+          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded text-center">
+            {error}
+          </div>
+        )}
+
         {/* Loading State */}
         {loading && (
           <div className="text-center py-20">
             <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-[#1B5E4A] border-r-transparent"></div>
-            <p className="mt-4 text-[#5A5A5A]">Loading freelancers...</p>
+            <p className="mt-4 text-[#5A5A5A]">{t('loading')}</p>
           </div>
         )}
 
@@ -99,10 +115,10 @@ export default function FreelancersPage() {
                 <Card className="text-center py-20 bg-white shadow-md">
                   <CardHeader>
                     <CardTitle className="text-2xl text-[#5A5A5A]">
-                      {searchQuery ? 'No freelancers found matching your search' : 'No freelancers available'}
+                      {searchQuery ? t('noResults') : t('noFreelancers')}
                     </CardTitle>
                     <CardDescription>
-                      {searchQuery ? 'Try adjusting your search terms' : 'Check back soon'}
+                      {searchQuery ? t('tryAdjust') : t('checkBack')}
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -139,13 +155,13 @@ export default function FreelancersPage() {
                         <div className="text-2xl font-bold text-[#1B5E4A]">
                           {freelancer.jobSuccessScore}%
                         </div>
-                        <div className="text-xs text-[#5A5A5A]">Success Rate</div>
+                        <div className="text-xs text-[#5A5A5A]">{tCommon('successRate')}</div>
                       </div>
                       <div className="bg-[#F5EDE3] rounded-lg p-3">
                         <div className="text-2xl font-bold text-[#1B5E4A]">
                           {freelancer.totalJobsCompleted}
                         </div>
-                        <div className="text-xs text-[#5A5A5A]">Jobs Done</div>
+                        <div className="text-xs text-[#5A5A5A]">{tCommon('jobsDone')}</div>
                       </div>
                     </div>
 
@@ -172,7 +188,7 @@ export default function FreelancersPage() {
                           ))}
                           {freelancer.skills.length > 3 && (
                             <span className="inline-block bg-[#F5EDE3] text-[#5A5A5A] text-xs px-3 py-1 rounded-full">
-                              +{freelancer.skills.length - 3} more
+                              +{freelancer.skills.length - 3} {tCommon('more')}
                             </span>
                           )}
                         </div>
@@ -184,20 +200,22 @@ export default function FreelancersPage() {
                       {freelancer.isAvailable ? (
                         <span className="inline-flex items-center gap-2 text-sm text-[#10B981] font-semibold">
                           <span className="w-2 h-2 bg-[#10B981] rounded-full"></span>
-                          Available Now
+                          {tCommon('availableNow')}
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-2 text-sm text-[#5A5A5A]">
                           <span className="w-2 h-2 bg-[#5A5A5A] rounded-full"></span>
-                          Not Available
+                          {tCommon('notAvailable')}
                         </span>
                       )}
                     </div>
 
                     {/* Action Button */}
-                    <Button className="w-full bg-[#1B5E4A] hover:bg-[#2D7A62] text-white">
-                      View Profile
-                    </Button>
+                    <Link href={`/${locale}/profile/${freelancer.userId}`}>
+                      <Button className="w-full bg-[#1B5E4A] hover:bg-[#2D7A62] text-white">
+                        {t('viewProfile')}
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               ))
@@ -209,8 +227,8 @@ export default function FreelancersPage() {
         {!loading && freelancers.length > 0 && (
           <div className="mt-12 text-center text-[#5A5A5A]">
             <p className="text-lg">
-              Showing <span className="font-bold text-[#1B5E4A]">{filteredFreelancers.length}</span> of{' '}
-              <span className="font-bold text-[#1B5E4A]">{freelancers.length}</span> freelancers
+              {t('showing')} <span className="font-bold text-[#1B5E4A]">{filteredFreelancers.length}</span> {t('of')}{' '}
+              <span className="font-bold text-[#1B5E4A]">{freelancers.length}</span> {t('freelancers')}
             </p>
           </div>
         )}

@@ -8,7 +8,6 @@ import {
   Param,
   Query,
   UseGuards,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -59,14 +58,14 @@ export class ProfilesController {
   async searchProfiles(
     @Query('category') category?: string,
     @Query('governorate') governorate?: string,
-    @Query('minRate', new ParseIntPipe({ optional: true })) minRate?: number,
-    @Query('maxRate', new ParseIntPipe({ optional: true })) maxRate?: number,
+    @Query('minRate') minRate?: string,
+    @Query('maxRate') maxRate?: string,
     @Query('skills') skills?: string,
     @Query('availability') availability?: string,
-    @Query('minJobSuccess', new ParseIntPipe({ optional: true })) minJobSuccess?: number,
+    @Query('minJobSuccess') minJobSuccess?: string,
     @Query('search') search?: string,
-    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
     const skillsArray = skills ? skills.split(',') : undefined;
     const availabilityBool = availability === 'true' ? true : availability === 'false' ? false : undefined;
@@ -74,14 +73,14 @@ export class ProfilesController {
     return this.profilesService.searchProfiles({
       category,
       governorate,
-      minRate,
-      maxRate,
+      minRate: minRate ? parseInt(minRate, 10) : undefined,
+      maxRate: maxRate ? parseInt(maxRate, 10) : undefined,
       skills: skillsArray,
       availability: availabilityBool,
-      minJobSuccess,
+      minJobSuccess: minJobSuccess ? parseInt(minJobSuccess, 10) : undefined,
       search,
-      page,
-      limit,
+      page: page ? parseInt(page, 10) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
     });
   }
 
@@ -95,9 +94,13 @@ export class ProfilesController {
   @Public()
   async getProfileReviews(
     @Param('userId') userId: string,
-    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
-    return this.profilesService.getProfileReviews(userId, page, limit);
+    return this.profilesService.getProfileReviews(
+      userId,
+      page ? parseInt(page, 10) : undefined,
+      limit ? parseInt(limit, 10) : undefined,
+    );
   }
 }

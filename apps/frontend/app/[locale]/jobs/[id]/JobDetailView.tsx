@@ -62,7 +62,7 @@ export default function JobDetailView({ locale, jobId }: JobDetailViewProps) {
   return (
     <div>
       <div className="mb-6">
-        <Link href={`/${locale}/jobs`} className="text-primary hover:underline">
+        <Link href={`/${locale}/jobs`} className="text-[#1B5E4A] hover:underline">
           ← {t('backToJobs')}
         </Link>
       </div>

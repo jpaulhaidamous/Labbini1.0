@@ -13,8 +13,10 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
   const t = await getTranslations('jobs');
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <JobDetailView locale={locale} jobId={id} />
+    <div className="min-h-screen bg-[#FDF8F3]">
+      <div className="container mx-auto px-4 py-8">
+        <JobDetailView locale={locale} jobId={id} />
+      </div>
     </div>
   );
 }

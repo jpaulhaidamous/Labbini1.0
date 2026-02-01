@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useJobsStore } from '@/lib/stores/jobs.store';
-import { useAuthStore } from '@/lib/stores/auth.store';
+import { useAuthGuard } from '@/lib/hooks/useAuthGuard';
 import MyJobsList from '@/components/dashboard/MyJobsList';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -16,20 +16,17 @@ interface MyJobsViewProps {
 export default function MyJobsView({ locale }: MyJobsViewProps) {
   const t = useTranslations('jobs');
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, isReady } = useAuthGuard(locale);
   const { myJobs, isLoading, error, fetchMyJobs, updateJob } = useJobsStore();
 
   useEffect(() => {
-    if (!user) {
-      router.push(`/${locale}/login`);
-      return;
-    }
+    if (!isReady || !user) return;
     if (user.role !== 'CLIENT') {
       router.push(`/${locale}/dashboard`);
       return;
     }
     fetchMyJobs();
-  }, [user, locale, router, fetchMyJobs]);
+  }, [isReady, user, locale, router, fetchMyJobs]);
 
   const handleCloseJob = async (jobId: string) => {
     if (confirm(t('confirmCloseJob'))) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,8 @@ import { useAuthStore } from '@/lib/stores/auth.store';
 export default function PhoneVerificationForm() {
   const t = useTranslations('auth');
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname?.startsWith('/ar') ? 'ar' : 'en';
   const { user, loadUser } = useAuthStore();
 
   const [code, setCode] = useState(['', '', '', '', '', '']);
@@ -118,7 +120,7 @@ export default function PhoneVerificationForm() {
 
       // Redirect to dashboard after 1 second
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push(`/${locale}/dashboard`);
       }, 1000);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Invalid verification code');
@@ -133,7 +135,7 @@ export default function PhoneVerificationForm() {
     return (
       <div className="text-center py-8">
         <div className="text-green-600 mb-4">✓ {t('phoneAlreadyVerified')}</div>
-        <Button onClick={() => router.push('/dashboard')}>
+        <Button onClick={() => router.push(`/${locale}/dashboard`)}>
           {t('goToDashboard')}
         </Button>
       </div>

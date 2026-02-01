@@ -8,8 +8,6 @@ import {
   Param,
   Query,
   UseGuards,
-  ParseIntPipe,
-  ParseBoolPipe,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -38,28 +36,28 @@ export class JobsController {
   async findAll(
     @Query('category') category?: string,
     @Query('jobType') jobType?: string,
-    @Query('budgetMin', new ParseIntPipe({ optional: true })) budgetMin?: number,
-    @Query('budgetMax', new ParseIntPipe({ optional: true })) budgetMax?: number,
+    @Query('budgetMin') budgetMin?: string,
+    @Query('budgetMax') budgetMax?: string,
     @Query('locationType') locationType?: string,
     @Query('governorate') governorate?: string,
-    @Query('isUrgent', new ParseBoolPipe({ optional: true })) isUrgent?: boolean,
+    @Query('isUrgent') isUrgent?: string,
     @Query('search') search?: string,
     @Query('status') status?: string,
-    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
     return this.jobsService.findAll({
       category,
       jobType,
-      budgetMin,
-      budgetMax,
+      budgetMin: budgetMin ? parseInt(budgetMin, 10) : undefined,
+      budgetMax: budgetMax ? parseInt(budgetMax, 10) : undefined,
       locationType,
       governorate,
-      isUrgent,
+      isUrgent: isUrgent === 'true' ? true : isUrgent === 'false' ? false : undefined,
       search,
       status,
-      page,
-      limit,
+      page: page ? parseInt(page, 10) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
     });
   }
 

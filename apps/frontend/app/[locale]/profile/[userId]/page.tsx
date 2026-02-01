@@ -13,9 +13,11 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
   const t = await getTranslations('profile');
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <PublicProfileView locale={locale} userId={userId} />
+    <div className="min-h-screen bg-[#FDF8F3]">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <PublicProfileView locale={locale} userId={userId} />
+        </div>
       </div>
     </div>
   );

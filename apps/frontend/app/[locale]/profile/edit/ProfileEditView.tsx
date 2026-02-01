@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useProfilesStore } from '@/lib/stores/profiles.store';
-import { useAuthStore } from '@/lib/stores/auth.store';
+import { useAuthGuard } from '@/lib/hooks/useAuthGuard';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 
 interface ProfileEditViewProps {
@@ -13,19 +12,15 @@ interface ProfileEditViewProps {
 
 export default function ProfileEditView({ locale }: ProfileEditViewProps) {
   const t = useTranslations('profile');
-  const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, isReady } = useAuthGuard(locale);
   const { myProfile, isLoading, error, fetchMyProfile } = useProfilesStore();
 
   useEffect(() => {
-    if (!user) {
-      router.push(`/${locale}/login`);
-      return;
-    }
+    if (!isReady) return;
     if (!myProfile) {
       fetchMyProfile();
     }
-  }, [user, myProfile, locale, router, fetchMyProfile]);
+  }, [isReady, myProfile, fetchMyProfile]);
 
   if (isLoading && !myProfile) {
     return (

@@ -21,20 +21,20 @@ export class MessagesController {
 
   @Post('threads')
   async createThread(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser('userId') userId: string,
     @Body() createThreadDto: CreateThreadDto,
   ) {
     return this.messagesService.createThread(userId, createThreadDto);
   }
 
   @Get('threads')
-  async getUserThreads(@CurrentUser('sub') userId: string) {
+  async getUserThreads(@CurrentUser('userId') userId: string) {
     return this.messagesService.getUserThreads(userId);
   }
 
   @Get('threads/:threadId')
   async getThread(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('threadId') threadId: string,
   ) {
     return this.messagesService.getThread(userId, threadId);
@@ -42,7 +42,7 @@ export class MessagesController {
 
   @Get('threads/:threadId/messages')
   async getThreadMessages(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('threadId') threadId: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
@@ -57,7 +57,7 @@ export class MessagesController {
 
   @Post('threads/:threadId/messages')
   async sendMessage(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('threadId') threadId: string,
     @Body() sendMessageDto: SendMessageDto,
   ) {
@@ -66,14 +66,14 @@ export class MessagesController {
 
   @Patch('threads/:threadId/read')
   async markAsRead(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('threadId') threadId: string,
   ) {
     return this.messagesService.markMessagesAsRead(userId, threadId);
   }
 
   @Get('unread-count')
-  async getUnreadCount(@CurrentUser('sub') userId: string) {
+  async getUnreadCount(@CurrentUser('userId') userId: string) {
     return this.messagesService.getUnreadCount(userId);
   }
 }
